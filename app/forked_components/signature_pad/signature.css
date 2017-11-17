@@ -221,6 +221,7 @@ canvas {
 }
 
 .signature-pad--progress{
+    display: none;
     margin-top: 3px;
 }
 
