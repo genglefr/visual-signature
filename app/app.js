@@ -35,7 +35,6 @@ Dropzone.options.dropzone = {
                 _pdf.filename = file.name;
                 loadPage(1);
                 /*Ugly hack for IE*/
-                wrapper.style.display = "block";
                 bodyWrapper.style.display = "block";
             });
         });
