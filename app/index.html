@@ -16,11 +16,13 @@
 
   <link rel="stylesheet" href="app.css">
   <link rel="stylesheet" href="forked_components/signature_pad/signature.css">
+  <link rel="stylesheet" href="bower_components/dropzone/dist/dropzone.css">
 </head>
 <body>
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
+
 
   <div id="signature-pad" class="signature-pad">
     <div class="signature-pad--header">
@@ -30,13 +32,18 @@
           <button type="button" class="button clear" data-action="reset">Reset</button>
           <button type="button" class="button" data-action="print">Print</button>
         </div>
-        <div style="text-align:center">
+        <div style="display: none !important;text-align:center" class="pdf-nav">
           <button type="button" class="button" data-action="first-page">&lt;&lt;</button>
           <button type="button" class="button" data-action="prev-page">&lt;</button>
           <span id="current-page"></span>
           <button type="button" class="button" data-action="next-page">&gt;</button>
           <button type="button" class="button" data-action="last-page">&gt;&gt;</button>
         </div>
+        <div style="text-align:center" class="dropzone-container"><form action="javascript:;" class="dropzone" id="dropzone">
+          <div class="fallback">
+            <input name="file" type="file" />
+          </div>
+        </form></div>
         <div>
           <button type="button" class="button save" data-action="save-png">PNG</button>
           <button type="button" class="button save" data-action="save-svg">SVG</button>
@@ -62,6 +69,7 @@
 
   <script src="forked_components/pdfjs-dist/build/pdf.js"></script>
   <script src="forked_components/signature_pad/signature_pad.js"></script>
+  <script src="bower_components/dropzone/dist/dropzone.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

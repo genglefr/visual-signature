@@ -12,18 +12,36 @@ var printButton = wrapper.querySelector("[data-action=print]");
 var lastPageButton = wrapper.querySelector("[data-action=last-page]");
 var canvas = wrapper.querySelector("canvas");
 var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]");
+var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
+var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
+var dropzoneWrapper = wrapper.querySelector("[class=dropzone-container]");
 var bar = progressBarWrapper.querySelector("[class=bar]");
 var _pdf;
 var history = {};
-var scale = 1.5;
+var scale = 1.8;
 
-PDFJS.getDocument('samples/wo.pdf').then(function (pdf) {
-    console.log(pdf);
-    _pdf = pdf;
-    loadPage(1);
-    /*Ugly hack for IE*/
-    wrapper.style.display = "block";
-});
+Dropzone.options.dropzone = {
+    paramName: "file", // The name that will be used to transfer the file
+    maxFilesize: 2, // MB
+    acceptedFiles: "application/pdf",
+    accept: function(file, done) {
+        dropzoneWrapper.style.display = "none";
+        pdfNavWrapper.style.display = "inline-block";
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function(event) {
+            PDFJS.getDocument(event.target.result).then(function (pdf) {
+                console.log(pdf);
+                _pdf = pdf;
+                _pdf.filename = file.name;
+                loadPage(1);
+                /*Ugly hack for IE*/
+                wrapper.style.display = "block";
+                bodyWrapper.style.display = "block";
+            });
+        });
+        reader.readAsDataURL(file);
+    }
+};
 
 function renderPage(pageNum, _canvas, _signaturePad) {
     return _pdf.getPage(pageNum).then(function (page) {
@@ -95,7 +113,7 @@ savePDFButton.addEventListener("click", function (event) {
                 setBarWidth(bar, message.value);
             }
             if (message.status == "complete") {
-                download(message.value, "pdf.pdf");
+                download(message.value, _pdf.filename);
                 setTimeout(function(){
                     progressBarWrapper.style.display = "none";
                 }, 2000);
