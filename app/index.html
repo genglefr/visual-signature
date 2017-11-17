@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My signature App</title>
+  <meta name="description" content="Signature Pad - HTML5 canvas based smooth signature drawing using variable width spline interpolation.">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="forked_components/signature_pad/signature.css">
+</head>
+<body>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div id="signature-pad" class="signature-pad">
+    <div class="signature-pad--header">
+      <div class="signature-pad--actions">
+        <div>
+          <button type="button" class="button clear" data-action="clear">Clear</button>
+          <button type="button" class="button clear" data-action="reset">Reset</button>
+          <button type="button" class="button" data-action="print">Print</button>
+        </div>
+        <div style="text-align:center">
+          <button type="button" class="button" data-action="first-page">&lt;&lt;</button>
+          <button type="button" class="button" data-action="prev-page">&lt;</button>
+          <span id="current-page"></span>
+          <button type="button" class="button" data-action="next-page">&gt;</button>
+          <button type="button" class="button" data-action="last-page">&gt;&gt;</button>
+        </div>
+        <div>
+          <button type="button" class="button save" data-action="save-png">PNG</button>
+          <button type="button" class="button save" data-action="save-svg">SVG</button>
+          <button type="button" class="button save" data-action="save-pdf">PDF</button>
+        </div>
+      </div>
+      <div class="signature-pad--progress">
+        <div class="progress">
+          <div class="bar"></div>
+        </div>
+      </div>
+    </div>
+    <div class="signature-pad--body">
+      <canvas></canvas>
+    </div>
+  </div>
+  <div id="signature-print-modal" class="modal">
+    <div class="modal-content">
+      <div id="signature-print-modal-content"></div>
+      <span class="close">&times;</span>
+    </div>
+  </div>
+
+  <script src="forked_components/pdfjs-dist/build/pdf.js"></script>
+  <script src="forked_components/signature_pad/signature_pad.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
