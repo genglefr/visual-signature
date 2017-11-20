@@ -28,9 +28,11 @@
     <div class="signature-pad--header">
       <div class="signature-pad--actions">
         <div>
-          <button type="button" class="button clear" data-action="clear">Clear</button>
-          <button type="button" class="button clear" data-action="reset">Reset</button>
-          <button type="button" class="button" data-action="print">Print</button>
+          <button type="button" class="button clear" data-action="clear" disabled="disabled">Clear</button>
+          <button type="button" class="button clear" data-action="reset" disabled="disabled">Reset</button>
+          <button type="button" class="button" data-action="print" disabled="disabled">Print</button>
+          <button type="button" class="button" data-action="change">Load</button>
+          <input id="file" accept="application/pdf" name="file" type="file" style="display: none" />
         </div>
         <div style="display: none !important;text-align:center" class="pdf-nav">
           <button type="button" class="button" data-action="first-page">&lt;&lt;</button>
@@ -39,15 +41,10 @@
           <button type="button" class="button" data-action="next-page">&gt;</button>
           <button type="button" class="button" data-action="last-page">&gt;&gt;</button>
         </div>
-        <div style="text-align:center" class="dropzone-container"><form action="javascript:;" class="dropzone" id="dropzone">
-          <div class="fallback">
-            <input name="file" type="file" />
-          </div>
-        </form></div>
         <div>
-          <button type="button" class="button save" data-action="save-png">PNG</button>
-          <button type="button" class="button save" data-action="save-svg">SVG</button>
-          <button type="button" class="button save" data-action="save-pdf">PDF</button>
+          <button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-svg" data-action="save-svg" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled">&nbsp;</button>
         </div>
       </div>
       <div class="signature-pad--progress">
@@ -69,7 +66,6 @@
 
   <script src="forked_components/pdfjs-dist/build/pdf.js"></script>
   <script src="forked_components/signature_pad/signature_pad.js"></script>
-  <script src="bower_components/dropzone/dist/dropzone.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

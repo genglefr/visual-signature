@@ -9,38 +9,32 @@ var firstPageButton = wrapper.querySelector("[data-action=first-page]");
 var prevPageButton = wrapper.querySelector("[data-action=prev-page]");
 var nextPageButton = wrapper.querySelector("[data-action=next-page]");
 var printButton = wrapper.querySelector("[data-action=print]");
+var changeButton = wrapper.querySelector("[data-action=change]");
 var lastPageButton = wrapper.querySelector("[data-action=last-page]");
 var canvas = wrapper.querySelector("canvas");
 var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]");
 var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
 var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
-var dropzoneWrapper = wrapper.querySelector("[class=dropzone-container]");
 var bar = progressBarWrapper.querySelector("[class=bar]");
-var _pdf;
-var history = {};
 var scale = 1.8;
 
-Dropzone.options.dropzone = {
-    paramName: "file", // The name that will be used to transfer the file
-    maxFilesize: 2, // MB
-    acceptedFiles: "application/pdf",
-    accept: function(file, done) {
-        dropzoneWrapper.style.display = "none";
-        pdfNavWrapper.style.display = "inline-block";
-        var reader = new FileReader();
-        reader.addEventListener("loadend", function(event) {
-            PDFJS.getDocument(event.target.result).then(function (pdf) {
-                console.log(pdf);
-                _pdf = pdf;
-                _pdf.filename = file.name;
-                loadPage(1);
-                /*Ugly hack for IE*/
-                bodyWrapper.style.display = "block";
-            });
+wrapper.querySelector("[id=file]").onchange = function(ev) {
+    var file = ev.target.files[0];
+    if (file) {
+        PDFJS.getDocument(URL.createObjectURL(file)).then(function (pdf) {
+            _pdf = pdf;
+            history = {};
+            signaturePad = createSignaturePad(canvas);
+            _pdf.filename = file.name;
+            loadPage(1);
+            /*Adapt UI*/
+            clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSVGButton.disabled = savePDFButton.disabled = false;
+            /*Ugly hack for IE*/
+            pdfNavWrapper.style.display = "inline-block";
+            bodyWrapper.style.display = "block";
         });
-        reader.readAsDataURL(file);
     }
-};
+}
 
 function renderPage(pageNum, _canvas, _signaturePad) {
     return _pdf.getPage(pageNum).then(function (page) {
@@ -73,6 +67,7 @@ function loadPage(pageNum){
         }
         signaturePad.clear();
     } else {
+        console.log("should not happen");
         signaturePad = createSignaturePad(canvas);
     }
     renderPage(pageNum, canvas, signaturePad);
@@ -197,6 +192,10 @@ resetButton.addEventListener("click", function (event) {
     loadPage(1);
 });
 
+changeButton.addEventListener("click", function (event) {
+    wrapper.querySelector("[id=file]").click();
+});
+
 function getDataUrl(_signaturePad, format) {
     if (_signaturePad.isEmpty()) {
         if (!format || format.indexOf("svg") == -1){
@@ -210,19 +209,21 @@ function getDataUrl(_signaturePad, format) {
 
 function download(dataURL, filename) {
     var blob = dataURLToBlob(dataURL);
-    if (window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveOrOpenBlob(blob, filename);
-    } else {
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.style = "display: none";
-        a.href = url;
-        a.download = filename;
+    if (blob){
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.style = "display: none";
+            a.href = url;
+            a.download = filename;
 
-        document.body.appendChild(a);
-        a.click();
+            document.body.appendChild(a);
+            a.click();
 
-        window.URL.revokeObjectURL(url);
+            window.URL.revokeObjectURL(url);
+        }
     }
 }
 

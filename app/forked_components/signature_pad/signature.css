@@ -49,9 +49,9 @@ body {
     content: "";
     width: 40%;
     height: 10px;
-    bottom: 10px;
+    bottom: 13px;
     background: transparent;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 11px 12px rgba(0, 0, 0, 0.4);
 }
 
 .signature-pad::before {
@@ -72,10 +72,11 @@ body {
     -webkit-box-flex: 1;
     -ms-flex: 1;
     flex: 1;
-    border: 1px dotted #b3b3b3;
+    /*border: 1px dotted #b3b3b3;*/
     overflow-x: auto;
     overflow-y: auto;
     text-align: center;
+    margin-bottom: -2px;
 }
 
 .signature-pad--body
@@ -105,6 +106,7 @@ canvas {
     box-shadow: 0 1px 30px rgba(0, 0, 0, 0.27), 0 0 5px rgba(0, 0, 0, 0.08) inset;
     border-radius: 4px;
     padding: 16px;
+    padding-bottom: 10px;
     width: 1024px;
     left:50%;
     top: 40px;
@@ -121,6 +123,7 @@ canvas {
 
 .signature-pad--actions div:last-child {
     float: right;
+    margin-top: -4px;
 }
 
 #current-page {
@@ -220,26 +223,45 @@ canvas {
 
 .signature-pad--progress{
     display: none;
-    margin-top: 3px;
+    margin-top: 10px;
 }
 
 .progress{
+    margin-top: 1px;
     width: 100%;
 }
 .bar{
     width: 0%;
-    height: 2px;
+    height: 1px;
     background-color: green;
 }
 
-.dropzone {
-    min-height: unset !important;
-    padding: 0 !important;
-    border-radius: 7px;
-    border:none !important;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.27), 0px 0px 0px rgba(0, 0, 0, 0.08) inset;
-    font-size: 15px;
+progress[value]::-webkit-progress-value {
+    background-image:
+            -webkit-linear-gradient(-45deg,
+            transparent 33%, rgba(0, 0, 0, .1) 33%,
+            rgba(0,0, 0, .1) 66%, transparent 66%),
+            -webkit-linear-gradient(top,
+            rgba(255, 255, 255, .25),
+            rgba(0, 0, 0, .25)),
+            -webkit-linear-gradient(left, #09c, #f44);
+
+    border-radius: 2px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
 }
-.dropzone .dz-message{
-    margin:0 !important;
+.icon{
+    height: 30px;
+    width: 30px;
+    border: none;
+    background-size: cover;
+    background-color: transparent;
+}
+.icon-pdf {
+    background-image: url(/assets/pdf.svg);
+}
+.icon-svg {
+    background-image: url(/assets/svg.svg);
+}
+.icon-png {
+    background-image: url(/assets/png.svg);
 }
