@@ -18,13 +18,31 @@ var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
 var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
 var bar = progressBarWrapper.querySelector("[class=bar]");
 var scale = 1.8;
+var worker = initWorker();
+
+function initWorker(){
+    var worker = new Worker('worker.js');
+    worker.addEventListener('message', function(e) {
+        var message = e.data;
+        if (message.status == "progress") {
+            setBarWidth(bar, message.value);
+        }
+        if (message.status == "complete") {
+            download(message.value, _pdf.filename);
+            setTimeout(function(){
+                progressBarWrapper.style.display = "none";
+            }, 2000);
+        }
+    }, false);
+    return worker;
+}
 
 wrapper.querySelector("[id=file]").onchange = function(ev) {
     var file = ev.target.files[0];
     if (file) {
         PDFJS.getDocument(URL.createObjectURL(file)).then(function (pdf) {
             _pdf = pdf;
-            history = {};
+            clearHistory();
             signaturePad = createSignaturePad(canvas);
             _pdf.filename = file.name;
             loadPage(1);
@@ -100,20 +118,7 @@ savePDFButton.addEventListener("click", function (event) {
                 struct[i] = page;
             }
         }
-        var worker = new Worker('worker.js');
         worker.postMessage(struct);
-        worker.addEventListener('message', function(e) {
-            var message = e.data;
-            if (message.status == "progress") {
-                setBarWidth(bar, message.value);
-            }
-            if (message.status == "complete") {
-                download(message.value, _pdf.filename);
-                setTimeout(function(){
-                    progressBarWrapper.style.display = "none";
-                }, 2000);
-            }
-        }, false);
     });
 });
 
@@ -191,10 +196,14 @@ clearButton.addEventListener("click", function (event) {
 
 resetButton.addEventListener("click", function (event) {
     signaturePad.clear();
-    delete history;
-    history = {};
+    clearHistory();
     loadPage(1);
 });
+
+function clearHistory() {
+    if(history) delete history;
+    history = {};
+}
 
 changeButton.addEventListener("click", function (event) {
     wrapper.querySelector("[id=file]").click();
