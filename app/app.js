@@ -3,7 +3,7 @@ var currentPageWrapper = document.getElementById("current-page");
 var clearButton = wrapper.querySelector("[data-action=clear]");
 var resetButton = wrapper.querySelector("[data-action=reset]");
 var savePNGButton = wrapper.querySelector("[data-action=save-png]");
-var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
+var saveSignatureButton = wrapper.querySelector("[data-action=save-sign]");
 var savePDFButton = wrapper.querySelector("[data-action=save-pdf]");
 var firstPageButton = wrapper.querySelector("[data-action=first-page]");
 var prevPageButton = wrapper.querySelector("[data-action=prev-page]");
@@ -11,6 +11,7 @@ var nextPageButton = wrapper.querySelector("[data-action=next-page]");
 var printButton = wrapper.querySelector("[data-action=print]");
 var changeButton = wrapper.querySelector("[data-action=change]");
 var lastPageButton = wrapper.querySelector("[data-action=last-page]");
+var signButton = wrapper.querySelector("[data-action=sign]");
 var canvas = wrapper.querySelector("canvas");
 var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]");
 var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
@@ -28,7 +29,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
             _pdf.filename = file.name;
             loadPage(1);
             /*Adapt UI*/
-            clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSVGButton.disabled = savePDFButton.disabled = false;
+            clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSignatureButton.disabled = savePDFButton.disabled = false;
             /*Ugly hack for IE*/
             pdfNavWrapper.style.display = "inline-block";
             bodyWrapper.style.display = "block";
@@ -175,8 +176,11 @@ savePNGButton.addEventListener("click", function (event) {
     download(getDataUrl(signaturePad), "signature.png");
 });
 
-saveSVGButton.addEventListener("click", function (event) {
-    download(getDataUrl(signaturePad, 'image/svg+xml'), "signature.svg");
+saveSignatureButton.addEventListener("click", function (event) {
+    var result = signaturePad.removeBlanks();
+    console.log("x axis: "+result.x);
+    console.log("y axis: "+result.y);
+    download(result.dataURL, "signature.png");
 });
 
 clearButton.addEventListener("click", function (event) {
