@@ -17,7 +17,8 @@ var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]"
 var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
 var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
 var bar = progressBarWrapper.querySelector("[class=bar]");
-var scale = 1.8;
+var range = wrapper.querySelector("[name=scale]");
+var scale = range.value;
 var worker = initWorker();
 
 function initWorker(){
@@ -52,6 +53,25 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
             pdfNavWrapper.style.display = "inline-block";
             bodyWrapper.style.display = "block";
         });
+    }
+}
+
+range.onchange = function(ev) {
+    var ratio = ev.target.value/ev.target.defaultValue;
+    ev.target.defaultValue = ev.target.value;
+    signaturePad.scale(ratio);
+    scaleHistory(ratio);
+    scale = ev.target.value;
+    loadPage(currentPage);
+}
+
+function scaleHistory(_ratio){
+    var keys = Object.keys(history);
+    for(var i=0; i<=keys.length; i++){
+        var key = keys[i];
+        var pointGroups = history[key];
+        if (pointGroups)
+            history[key] = signaturePad.scalePoints(pointGroups, _ratio);
     }
 }
 
@@ -195,10 +215,15 @@ clearButton.addEventListener("click", function (event) {
 });
 
 resetButton.addEventListener("click", function (event) {
+    reset();
+});
+
+function reset(_pageNum) {
     signaturePad.clear();
     clearHistory();
-    loadPage(1);
-});
+    if (!_pageNum) _pageNum=1;
+    loadPage(_pageNum);
+}
 
 function clearHistory() {
     if(history) delete history;

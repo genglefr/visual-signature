@@ -655,6 +655,26 @@
         return {dataURL:croppedCanvas.toDataURL(format), x: pix.x[0], y:pix.y[0]};
     };
 
+    SignaturePad.prototype.scale = function (ratio) {
+        this.fromData(this.scalePoints(this.toData(),ratio));
+    }
+
+    SignaturePad.prototype.scalePoints = function (pointGroups, ratio) {
+        var toData = new Array();
+        for (var i=0; i<pointGroups.length; i++) {
+            var toDraw = new Array();
+            for(var j=0; j<pointGroups[i].length; j++){
+                var x = pointGroups[i][j].x*ratio;
+                var y = pointGroups[i][j].y*ratio;
+                var time = pointGroups[i][j].time;
+                var color = pointGroups[i][j].color;
+                toDraw.push({"x":x,"y":y,"time":time,"color":color});
+            }
+            toData.push(toDraw);
+        }
+        return toData;
+    }
+
     return SignaturePad;
 
 })));

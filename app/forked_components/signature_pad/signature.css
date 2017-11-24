@@ -49,21 +49,21 @@ body {
     content: "";
     width: 40%;
     height: 10px;
-    bottom: 13px;
+    bottom: 15px;
     background: transparent;
     box-shadow: 0 11px 12px rgba(0, 0, 0, 0.4);
 }
 
 .signature-pad::before {
     left: 20px;
-    -webkit-transform: skew(-3deg) rotate(-3deg);
-    transform: skew(-3deg) rotate(-3deg);
+    -webkit-transform: skew(-2deg) rotate(-2deg);
+    transform: skew(-2deg) rotate(-2deg);
 }
 
 .signature-pad::after {
     right: 20px;
-    -webkit-transform: skew(3deg) rotate(3deg);
-    transform: skew(3deg) rotate(3deg);
+    -webkit-transform: skew(2deg) rotate(2deg);
+    transform: skew(2deg) rotate(2deg);
 }
 
 .signature-pad--body {
@@ -76,6 +76,11 @@ body {
     overflow: hidden;
     text-align: center;
     /*margin-bottom: -2px;*/
+}
+
+#scale{
+    vertical-align: middle;
+    margin-left: 10px;
 }
 
 .signature-pad--body
