@@ -73,10 +73,9 @@ body {
     -ms-flex: 1;
     flex: 1;
     /*border: 1px dotted #b3b3b3;*/
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: hidden;
     text-align: center;
-    margin-bottom: -2px;
+    /*margin-bottom: -2px;*/
 }
 
 .signature-pad--body
@@ -87,6 +86,7 @@ canvas {
     height: auto;
     border-radius: 4px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+    display: block;
 }
 
 .signature-pad--header {
