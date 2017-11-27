@@ -1,0 +1,12 @@
+body{
+    background-color: rgba(0,0,0,0.4);
+}
+.signature-pad--header {
+    border-radius: unset;
+    box-shadow: 0 1px 30px rgba(0, 0, 0, 0.4), 0 0 5px rgba(0, 0, 0, 0.08) inset;
+    -webkit-app-region: drag;
+}
+
+.signature-pad--header button, input {
+    -webkit-app-region: no-drag;
+}
