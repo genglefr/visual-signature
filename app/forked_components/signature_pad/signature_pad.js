@@ -646,7 +646,7 @@
 
         w = pix.x[n] - pix.x[0];
         h = pix.y[n] - pix.y[0];
-        var cut = croppedCtx.getImageData(pix.x[0], pix.y[0], w, h);
+        var cut = croppedCtx.getImageData(Math.round(pix.x[0]), Math.round(pix.y[0]), Math.round(w), Math.round(h));
 
         croppedCanvas.width = w;
         croppedCanvas.height = h;

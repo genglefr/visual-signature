@@ -14,34 +14,34 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
+  <link rel="stylesheet" href="range.css">
   <link rel="stylesheet" href="app.css">
-  <link rel="stylesheet" href="forked_components/signature_pad/signature.css">
-  <link rel="stylesheet" href="bower_components/dropzone/dist/dropzone.css">
+  <link rel="stylesheet" href="electron.css">
 </head>
 <body>
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-
   <div id="signature-pad" class="signature-pad">
     <div class="signature-pad--header">
       <div class="signature-pad--actions">
         <div>
-          <button type="button" class="button clear" data-action="clear" disabled="disabled">Clear</button>
-          <button type="button" class="button clear" data-action="reset" disabled="disabled">Reset</button>
-          <button type="button" class="button" data-action="print" disabled="disabled">Print</button>
-          <button type="button" class="button" data-action="change">Load</button>
+          <button type="button" class="button icon icon-load" data-action="change">&nbsp;</button>
+          <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-print" data-action="print" disabled="disabled">&nbsp;</button>
           <!--button type="button" class="button" data-action="sign">Sign</button-->
           <input id="file" accept="application/pdf" name="file" type="file" style="display: none" />
         </div>
         <div style="display: none !important;text-align:center" class="pdf-nav">
-          <button type="button" class="button" data-action="first-page">&lt;&lt;</button>
-          <button type="button" class="button" data-action="prev-page">&lt;</button>
-          <span id="current-page"></span>
-          <button type="button" class="button" data-action="next-page">&gt;</button>
-          <button type="button" class="button" data-action="last-page">&gt;&gt;</button>
-          <input type="range" id="scale" name="scale" min="1.0" max="3.0" step="0.2" value="1.8"/>
+          <button type="button" class="button icon icon-first-page" data-action="first-page">&nbsp;</button>
+          <button type="button" class="button icon icon-previous" data-action="prev-page">&nbsp;</button>
+          <span name="current-page"></span>
+          <button type="button" class="button icon icon-next" data-action="next-page">&nbsp;</button>
+          <button type="button" class="button icon icon-last-page" data-action="last-page">&nbsp;</button>
+          <input type="range" id="scale" name="scale" min="50" max="150" step="25" value="100"/>
+          <span name="range-label">100%</span>
         </div>
         <div>
           <button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>

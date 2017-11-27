@@ -1,5 +1,5 @@
 var wrapper = document.getElementById("signature-pad");
-var currentPageWrapper = document.getElementById("current-page");
+var currentPageWrapper = wrapper.querySelector("[name=current-page]");
 var clearButton = wrapper.querySelector("[data-action=clear]");
 var resetButton = wrapper.querySelector("[data-action=reset]");
 var savePNGButton = wrapper.querySelector("[data-action=save-png]");
@@ -11,14 +11,22 @@ var nextPageButton = wrapper.querySelector("[data-action=next-page]");
 var printButton = wrapper.querySelector("[data-action=print]");
 var changeButton = wrapper.querySelector("[data-action=change]");
 var lastPageButton = wrapper.querySelector("[data-action=last-page]");
-var signButton = wrapper.querySelector("[data-action=sign]");
 var canvas = wrapper.querySelector("canvas");
 var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]");
 var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
 var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
 var bar = progressBarWrapper.querySelector("[class=bar]");
 var range = wrapper.querySelector("[name=scale]");
-var scale = range.value;
+var rangeLabel = wrapper.querySelector("[name=range-label]");
+var initScale = 1.8;
+var scale = initScale;
+var scaleStruct = {};
+scaleStruct[50] = initScale*0.5;
+scaleStruct[75] = initScale*0.75;
+scaleStruct[100] = initScale;
+scaleStruct[125] = initScale*1.25;
+scaleStruct[150] = initScale*1.5;
+
 var worker = initWorker();
 
 function initWorker(){
@@ -41,27 +49,36 @@ function initWorker(){
 wrapper.querySelector("[id=file]").onchange = function(ev) {
     var file = ev.target.files[0];
     if (file) {
-        PDFJS.getDocument(URL.createObjectURL(file)).then(function (pdf) {
-            _pdf = pdf;
-            clearHistory();
-            signaturePad = createSignaturePad(canvas);
-            _pdf.filename = file.name;
-            loadPage(1);
-            /*Adapt UI*/
-            clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSignatureButton.disabled = savePDFButton.disabled = false;
-            /*Ugly hack for IE*/
-            pdfNavWrapper.style.display = "inline-block";
-            bodyWrapper.style.display = "block";
-        });
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            PDFJS.getDocument(e.target.result).then(function (pdf) {
+                _pdf = pdf;
+                clearHistory();
+                signaturePad = createSignaturePad(canvas);
+                _pdf.filename = file.name;
+                loadPage(1);
+                /*Adapt UI*/
+                clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSignatureButton.disabled = savePDFButton.disabled = false;
+                /*Ugly hack for IE*/
+                pdfNavWrapper.style.display = "inline-block";
+                bodyWrapper.style.display = "block";
+            });
+        }
+        reader.readAsArrayBuffer(file);
     }
 }
 
 range.onchange = function(ev) {
-    var ratio = ev.target.value/ev.target.defaultValue;
-    ev.target.defaultValue = ev.target.value;
+    if(!ev.target.oldValue) {
+        ev.target.oldValue = ev.target.defaultValue;
+    }
+    var value = ev.target.value;
+    var ratio = scaleStruct[value]/scaleStruct[ev.target.oldValue];
+    ev.target.oldValue = value;
+    rangeLabel.textContent = value+"%";
     signaturePad.scale(ratio);
     scaleHistory(ratio);
-    scale = ev.target.value;
+    scale = scaleStruct[value];
     loadPage(currentPage);
 }
 

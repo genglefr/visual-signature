@@ -1,6 +1,6 @@
 importScripts(
-    "/forked_components/jspdf/jspdf.js",
-    "/forked_components/jspdf/plugins/addimage.js"
+    "./forked_components/jspdf/jspdf.js",
+    "./forked_components/jspdf/plugins/addimage.js"
 );
 
 self.addEventListener('message', function(e) {
