@@ -1,7 +1,7 @@
 {
-  "name": "visual-sign",
+  "name": "visualsign",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "main.js",
   "description": "A project for generating visually signed pdf document",
   "repository": "https://github.com/genglefr/visual-sign",

@@ -73,12 +73,13 @@ range.onchange = function(ev) {
         ev.target.oldValue = ev.target.defaultValue;
     }
     var value = ev.target.value;
-    var ratio = scaleStruct[value]/scaleStruct[ev.target.oldValue];
+    //var ratio = scaleStruct[value]/scaleStruct[ev.target.oldValue];
+    scale = initScale*(value/100);
+    var ratio = scale/(initScale*(ev.target.oldValue/100));
     ev.target.oldValue = value;
     rangeLabel.textContent = value+"%";
     signaturePad.scale(ratio);
     scaleHistory(ratio);
-    scale = scaleStruct[value];
     loadPage(currentPage);
 }
 
@@ -318,6 +319,7 @@ if (window.require) {
         bounds = window.getBounds();
         window.maximize();
         window.setResizable(false);
+        window.setMovable(false);
         maxButton.style.display = "none";
         restoreButton.style.display = "inline-block";
     });
@@ -326,6 +328,7 @@ if (window.require) {
         var window = BrowserWindow.remote.getCurrentWindow();
         window.setBounds(bounds);
         window.setResizable(true);
+        window.setMovable(true);
         restoreButton.style.display = "none";
         maxButton.style.display = "inline-block";
     });
