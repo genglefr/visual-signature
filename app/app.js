@@ -58,7 +58,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 _pdf.filename = file.name;
                 loadPage(1);
                 /*Adapt UI*/
-                clearButton.disabled = resetButton.disabled = printButton.disabled = savePNGButton.disabled = saveSignatureButton.disabled = savePDFButton.disabled = false;
+                clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
                 pdfNavWrapper.style.display = "inline-block";
                 bodyWrapper.style.display = "block";
@@ -214,7 +214,7 @@ lastPageButton.addEventListener("click", function (event) {
     loadPage(_pdf.numPages);
 });
 
-savePNGButton.addEventListener("click", function (event) {
+/*savePNGButton.addEventListener("click", function (event) {
     download(getDataUrl(signaturePad), "signature.png");
 });
 
@@ -223,7 +223,7 @@ saveSignatureButton.addEventListener("click", function (event) {
     console.log("x axis: "+result.x);
     console.log("y axis: "+result.y);
     download(result.dataURL, "signature.png");
-});
+});*/
 
 clearButton.addEventListener("click", function (event) {
     signaturePad.clear();
@@ -297,4 +297,43 @@ function dataURLToBlob(dataURL) {
         }
         return new Blob([uInt8Array], { type: contentType });
     }
+}
+
+if (window.require) {
+    var BrowserWindow = require('electron');
+    console.log(BrowserWindow.remote.getCurrentWindow());
+    var minButton = wrapper.querySelector("[data-action=minimize]");
+    minButton.style.display = "inline-block";
+    minButton.addEventListener("click", function (e) {
+        var window = BrowserWindow.remote.getCurrentWindow();
+        window.minimize();
+    });
+
+    var maxButton = wrapper.querySelector("[data-action=maximize]");
+    var restoreButton = wrapper.querySelector("[data-action=restore]");
+    var bounds = null;
+    maxButton.style.display = "inline-block";
+    maxButton.addEventListener("click", function (e) {
+        var window = BrowserWindow.remote.getCurrentWindow();
+        bounds = window.getBounds();
+        window.maximize();
+        window.setResizable(false);
+        maxButton.style.display = "none";
+        restoreButton.style.display = "inline-block";
+    });
+
+    restoreButton.addEventListener("click", function (e) {
+        var window = BrowserWindow.remote.getCurrentWindow();
+        window.setBounds(bounds);
+        window.setResizable(true);
+        restoreButton.style.display = "none";
+        maxButton.style.display = "inline-block";
+    });
+
+    var closeButton = wrapper.querySelector("[data-action=close]");
+    closeButton.style.display = "inline-block";
+    closeButton.addEventListener("click", function (e) {
+        var window = BrowserWindow.remote.getCurrentWindow();
+        window.close();
+    });
 }

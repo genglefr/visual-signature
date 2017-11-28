@@ -30,7 +30,9 @@
           <button type="button" class="button icon icon-load" data-action="change">&nbsp;</button>
           <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled">&nbsp;</button>
           <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled">&nbsp;</button>
-          <button type="button" class="button icon icon-print" data-action="print" disabled="disabled">&nbsp;</button>
+          <!--<button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-svg" data-action="save-sign" disabled="disabled">&nbsp;</button>-->
+          <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled">&nbsp;</button>
           <!--button type="button" class="button" data-action="sign">Sign</button-->
           <input id="file" accept="application/pdf" name="file" type="file" style="display: none" />
         </div>
@@ -44,9 +46,11 @@
           <span name="range-label">100%</span>
         </div>
         <div>
-          <button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
-          <button type="button" class="button icon icon-svg" data-action="save-sign" disabled="disabled">&nbsp;</button>
-          <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-print" data-action="print" disabled="disabled">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-min" data-action="minimize">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-max" data-action="maximize">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-restore" data-action="restore">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-close" data-action="close">&nbsp;</button>
         </div>
       </div>
       <div class="signature-pad--progress">

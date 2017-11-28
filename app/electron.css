@@ -10,3 +10,15 @@ body{
 .signature-pad--header button, input {
     -webkit-app-region: no-drag;
 }
+.icon-min {
+    background-image: url(./assets/last-page.svg);
+}
+.icon-max {
+    background-image: url(./assets/maximize.svg);
+}
+.icon-restore {
+    background-image: url(./assets/restore.svg);
+}
+.icon-close {
+    background-image: url(./assets/clear.svg);
+}
