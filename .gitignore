@@ -7,3 +7,4 @@ e2e-tests/
 tmp
 .DS_Store
 .idea
+release-builds/
