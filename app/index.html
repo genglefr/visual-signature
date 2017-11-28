@@ -27,30 +27,30 @@
     <div class="signature-pad--header">
       <div class="signature-pad--actions">
         <div>
-          <button type="button" class="button icon icon-load" data-action="change">&nbsp;</button>
-          <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled">&nbsp;</button>
-          <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-load" data-action="change" title="Load new file">&nbsp;</button>
+          <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled" title="Discard modifications on current page">&nbsp;</button>
+          <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled" title="Discard modifications and reload file">&nbsp;</button>
           <!--<button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
           <button type="button" class="button icon icon-svg" data-action="save-sign" disabled="disabled">&nbsp;</button>-->
-          <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled">&nbsp;</button>
+          <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled" title="Export file to PDF format">&nbsp;</button>
           <!--button type="button" class="button" data-action="sign">Sign</button-->
           <input id="file" accept="application/pdf" name="file" type="file" style="display: none" />
         </div>
         <div style="display: none !important;text-align:center" class="pdf-nav">
-          <button type="button" class="button icon icon-first-page" data-action="first-page">&nbsp;</button>
-          <button type="button" class="button icon icon-previous" data-action="prev-page">&nbsp;</button>
+          <button type="button" class="button icon icon-first-page" data-action="first-page" title="Back to first page">&nbsp;</button>
+          <button type="button" class="button icon icon-previous" data-action="prev-page" title="Back to previous page">&nbsp;</button>
           <span name="current-page"></span>
-          <button type="button" class="button icon icon-next" data-action="next-page">&nbsp;</button>
-          <button type="button" class="button icon icon-last-page" data-action="last-page">&nbsp;</button>
+          <button type="button" class="button icon icon-next" data-action="next-page" title="Go to next page">&nbsp;</button>
+          <button type="button" class="button icon icon-last-page" data-action="last-page" title="Go to last page">&nbsp;</button>
           <input type="range" id="scale" name="scale" min="50" max="150" value="100"/>
           <span name="range-label">100%</span>
         </div>
         <div>
-          <button type="button" class="button icon icon-print" data-action="print" disabled="disabled">&nbsp;</button>
-          <button style="display:none;" type="button" class="button icon icon-min" data-action="minimize">&nbsp;</button>
-          <button style="display:none;" type="button" class="button icon icon-max" data-action="maximize">&nbsp;</button>
-          <button style="display:none;" type="button" class="button icon icon-restore" data-action="restore">&nbsp;</button>
-          <button style="display:none;" type="button" class="button icon icon-close" data-action="close">&nbsp;</button>
+          <button type="button" class="button icon icon-print" data-action="print" disabled="disabled" title="Print current work">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-min" data-action="minimize" title="Minimize window">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-max" data-action="maximize" title="Maximize window">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-restore" data-action="restore" title="Restore window">&nbsp;</button>
+          <button style="display:none;" type="button" class="button icon icon-close" data-action="close" title="Close window">&nbsp;</button>
         </div>
       </div>
       <div class="signature-pad--progress">
