@@ -11,7 +11,7 @@ body{
     -webkit-app-region: no-drag;
 }
 .icon-min {
-    background-image: url(./assets/last-page.svg);
+    background-image: url(./assets/minimize.svg);
 }
 .icon-max {
     background-image: url(./assets/maximize.svg);
@@ -20,5 +20,5 @@ body{
     background-image: url(./assets/restore.svg);
 }
 .icon-close {
-    background-image: url(./assets/clear.svg);
+    background-image: url(./assets/close.svg);
 }
