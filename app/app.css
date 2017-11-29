@@ -133,11 +133,12 @@ canvas {
 }
 
 .signature-pad--actions span {
-  padding: 10px;
   color: black;
   font-family: Impact, Charcoal, sans-serif;
   font-size: 24px;
   vertical-align: sub;
+  width: 30px;
+  display: inline-block;
 }
 
 .modal{
