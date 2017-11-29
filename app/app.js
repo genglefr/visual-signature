@@ -149,7 +149,7 @@ function download(dataURL, filename) {
 // that it can be done using result of SignaturePad#toDataURL.
 function dataURLToBlob(dataURL) {
     // Code taken from https://github.com/ebidel/filer.js
-    if(dataURL){
+    if (dataURL){
         var parts = dataURL.split(';base64,');
         var contentType = parts[0].split(":")[1];
         var raw = window.atob(parts[1]);
