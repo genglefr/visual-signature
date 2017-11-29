@@ -188,6 +188,10 @@
             return tempSignaturePad.removeBlanks();
     }
 
+    DigitalSignature.prototype.getScale = function(){
+        return Math.round(100*(this.currentScale/this.initScale));
+    }
+
     return DigitalSignature;
 
 })));

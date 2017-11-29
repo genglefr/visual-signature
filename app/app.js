@@ -39,6 +39,7 @@ function onLoadPage(digitalSignature) {
     currentPageWrapper.innerHTML = pageNum;
     nextPageButton.disabled = lastPageButton.disabled = (pageNum == digitalSignature.getTotalPages() ? "disabled" : "");
     prevPageButton.disabled = firstPageButton.disabled = (pageNum == 1 ? "disabled" : "");
+    rangeLabel.textContent = digitalSignature.getScale()+"%";
 };
 
 var digitalSignature;
@@ -53,6 +54,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 /*Ugly hack for IE*/
                 pdfNavWrapper.style.display = "inline-block";
                 bodyWrapper.style.display = "block";
+                range.value = 100;
                 digitalSignature = _digitalSignature;
             });
         }
@@ -63,7 +65,6 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
 range.onchange = function(ev) {
     var value = ev.target.value;
     digitalSignature.scale(value);
-    rangeLabel.textContent = value+"%";
 }
 
 savePDFButton.addEventListener("click", function (event) {
