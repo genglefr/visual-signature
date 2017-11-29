@@ -4,7 +4,7 @@
             (global.DigitalSignature = factory());
 }(this, (function () { 'use strict';
 
-    function DigitalSignature(canvas, options) {
+    function DigitalSignature(canvas, file, filename, options) {
         var self = this;
         var opts = options || {};
         this.onProgress = opts.onProgress;
@@ -19,18 +19,18 @@
         this.worker = new Worker('worker.js');
         this.worker.addEventListener('message', function(e) {
             var message = e.data;
-            if (message.status == "progress") {
+            if (message.status == "progress" && self.onProgress) {
                 self.onProgress(message.value);
             }
-            if (message.status == "complete") {
+            if (message.status == "complete" && self.onComplete) {
                 self.onComplete(message.value, self.pdf.filename);
             }
         }, false);
 
-        return PDFJS.getDocument(opts.file).then(function (_pdf) {
+        return PDFJS.getDocument(file).then(function (_pdf) {
             self.pdf = _pdf;
             self.clearHistory();
-            self.pdf.filename = opts.filename;
+            self.pdf.filename = filename;
             self.loadPage(self.currentPage);
             return Promise.resolve(self);
         });
@@ -176,6 +176,16 @@
 
     DigitalSignature.prototype.loadLastPage = function(){
         this.loadPage(this.pdf.numPages);
+    }
+
+    DigitalSignature.prototype.extractContent = function(pageNum){
+        if (!pageNum) {
+            if (!this.signaturePad.isEmpty())
+                return this.signaturePad.removeBlanks();
+        }
+        var tempSignaturePad = new SignaturePad(document.createElement('canvas'));
+        if (!tempSignaturePad.isEmpty())
+            return tempSignaturePad.removeBlanks();
     }
 
     return DigitalSignature;
