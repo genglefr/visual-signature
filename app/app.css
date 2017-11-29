@@ -84,6 +84,8 @@ body {
   margin:0 !important;
   margin-left: 10px !important;
   padding:0;
+  padding-top:10px;
+  padding-bottom:10px;
 }
 
 .signature-pad--body
@@ -278,7 +280,7 @@ progress[value]::-webkit-progress-value {
   background-image: url(./assets/png.svg);
 }
 .icon-load {
-  background-image: url(./assets/upload.svg);
+  background-image: url(./assets/new.svg);
 }
 .icon-delete {
   background-image: url(./assets/delete.svg);
