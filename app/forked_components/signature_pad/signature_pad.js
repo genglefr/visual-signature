@@ -652,7 +652,7 @@
         croppedCanvas.height = h;
         croppedCtx.putImageData(cut, 0, 0);
 
-        return {dataURL:croppedCanvas.toDataURL(format), x: pix.x[0], y:pix.y[0]};
+        return {dataURL:croppedCanvas.toDataURL(format), x: pix.x[0], y:pix.y[0], width:w, height:h};
     };
 
     SignaturePad.prototype.scale = function (ratio) {
