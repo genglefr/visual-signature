@@ -127,6 +127,7 @@
         var self = this;
         var promises = this.renderPages();
         var struct = {};
+        console.log("waiting for promises...");
         Promise.all(promises).then(function(values){
             var inc = 100 / values.length;
             for (var i = 0; i < values.length; i++) {
@@ -179,13 +180,17 @@
     }
 
     DigitalSignature.prototype.extractContent = function(pageNum){
-        if (!pageNum) {
-            if (!this.signaturePad.isEmpty())
-                return this.signaturePad.removeBlanks();
+        var fromData = !pageNum || pageNum == this.currentPage ? this.signaturePad.toData() : this.history[pageNum];
+        if (fromData) {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.canvas.width;
+            canvas.height = this.canvas.height;
+            var tempSignaturePad = new SignaturePad(canvas);
+            tempSignaturePad.fromData(fromData);
+            tempSignaturePad.scale(1/this.currentScale);
+            if (!tempSignaturePad.isEmpty())
+                return tempSignaturePad.removeBlanks();
         }
-        var tempSignaturePad = new SignaturePad(document.createElement('canvas'));
-        if (!tempSignaturePad.isEmpty())
-            return tempSignaturePad.removeBlanks();
     }
 
     DigitalSignature.prototype.getScale = function(){
