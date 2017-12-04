@@ -651,8 +651,9 @@
         croppedCanvas.width = w;
         croppedCanvas.height = h;
         croppedCtx.putImageData(cut, 0, 0);
-
-        return {dataURL:croppedCanvas.toDataURL(format), x: pix.x[0], y:pix.y[0], width:w, height:h};
+        
+        var data = (format == 'image/svg+xml' ? coppedSignaturePad._toSVG() : croppedCanvas.toDataURL(format));
+        return {dataURL:data, x: pix.x[0], y:pix.y[0], width:w, height:h};
     };
 
     SignaturePad.prototype.scale = function (ratio) {
