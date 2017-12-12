@@ -183,7 +183,7 @@
         this.loadPage(this.pdf.numPages);
     };
 
-    DigitalSignature.prototype.extractContent = function (pageNum) {
+    DigitalSignature.prototype.extractPageContent = function (pageNum) {
         var fromData = !pageNum || pageNum === this.currentPage ? this.signaturePad.toData() : this.history[pageNum];
         if (fromData) {
             var canvas = document.createElement('canvas');
@@ -195,6 +195,14 @@
             if (!tempSignaturePad.isEmpty())
                 return tempSignaturePad.removeBlanks();
         }
+    }
+
+    DigitalSignature.prototype.extractContent = function () {
+        var struct = {};
+        for (var i = 1; i <= this.pdf.numPages; i++) {
+            struct[i] = this.extractPageContent(i);
+        }
+        return struct;
     }
 
     DigitalSignature.prototype.getScale = function () {
