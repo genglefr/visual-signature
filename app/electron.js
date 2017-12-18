@@ -1,6 +1,5 @@
 if (window.require) {
     var BrowserWindow = require('electron');
-    console.log(BrowserWindow.remote.getCurrentWindow());
     var minButton = wrapper.querySelector("[data-action=minimize]");
     minButton.style.display = "inline-block";
     minButton.addEventListener("click", function (e) {

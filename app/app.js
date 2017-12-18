@@ -48,7 +48,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
     if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            new DigitalSignature(canvas, e.target.result, file.name, {"onComplete":onComplete, "onProgress":onProgress, "onLoadPage":onLoadPage}).then(function(_digitalSignature){
+            new DigitalSignature(canvas, e.target.result, file.name, {"onComplete":onComplete, "onProgress":onProgress, "onLoadPage":onLoadPage, "penColor":"#999944", "initScale":1.7}).then(function(_digitalSignature){
                 /*Adapt UI*/
                 clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
