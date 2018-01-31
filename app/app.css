@@ -98,6 +98,10 @@ canvas {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
   display: block;
 }
+.temp-canvas{
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+}
 
 .signature-pad--header {
   color: #C3C3C3;
@@ -330,4 +334,22 @@ progress[value]::-webkit-progress-value {
 }
 .icon-zoom-out {
   background-image: url(./assets/zoom-out.svg);
+}
+.icon-signature {
+  background-image: url(./assets/signature.svg);
+}
+.icon-signature:disabled {
+  background-image: url(./assets/signature-disabled.svg);
+}
+.icon-copy-all {
+  background-image: url(./assets/copy-all.svg);
+}
+.icon-copy-all:disabled {
+    background-image: url(./assets/copy-all-disabled.svg);
+}
+.icon-confirm {
+  background-image: url(./assets/confirm.svg);
+}
+.icon-discard {
+  background-image: url(./assets/discard.svg);
 }

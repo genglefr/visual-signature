@@ -26,15 +26,18 @@
   <div id="signature-pad" class="signature-pad">
     <div class="signature-pad--header">
       <div class="signature-pad--actions">
-        <div>
+        <div class="main-actions">
           <button type="button" class="button icon icon-load" data-action="change" title="Load new file">&nbsp;</button>
+          <button type="button" class="button icon icon-signature" data-action="signature" disabled="disabled" title="Load new signature">&nbsp;</button>
           <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled" title="Discard modifications on current page">&nbsp;</button>
           <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled" title="Discard modifications and reload file">&nbsp;</button>
           <!--<button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
           <button type="button" class="button icon icon-svg" data-action="save-sign" disabled="disabled">&nbsp;</button>-->
+          <button type="button" class="button icon icon-copy-all" data-action="copy-all" disabled="disabled" title="Copy current layer on all pages">&nbsp;</button>
           <button type="button" class="button icon icon-pdf" data-action="save-pdf" disabled="disabled" title="Export file to PDF format">&nbsp;</button>
           <!--button type="button" class="button" data-action="sign">Sign</button-->
           <input id="file" accept="application/pdf" name="file" type="file" style="display: none" />
+          <input id="imageFile" accept="image/*" name="imageFile" type="file" style="display: none" />
         </div>
         <div style="display: none !important;text-align:center" class="pdf-nav">
           <button type="button" class="button icon icon-first-page" data-action="first-page" title="Back to first page">&nbsp;</button>
@@ -42,8 +45,14 @@
           <span name="current-page"></span>
           <button type="button" class="button icon icon-next" data-action="next-page" title="Go to next page">&nbsp;</button>
           <button type="button" class="button icon icon-last-page" data-action="last-page" title="Go to last page">&nbsp;</button>
-          <input type="range" id="scale" name="scale" min="25" max="175" value="100"/>
-          <span name="range-label" style="margin-left:20px"></span>
+          <input type="range" id="scale" name="scale" min="25" max="175" style="visibility: hidden" value="100"/>
+          <span name="range-label" style="margin-left:20px; visibility: hidden"></span>
+        </div>
+        <div style="display: none !important;text-align:center" class="signature-actions">
+          <button type="button" class="button icon icon-confirm" data-action="save-sign" title="Save image to page">&nbsp;</button>
+          <button type="button" class="button icon icon-discard" data-action="cancel-sign" title="Cancel">&nbsp;</button>
+          <input type="range" id="scale-signature" name="scale-signature" min="25" max="175" value="100"/>
+          <span name="range-signature-label" style="margin-left:20px"></span>
         </div>
         <div>
           <button type="button" class="button icon icon-print" data-action="print" disabled="disabled" title="Print current work">&nbsp;</button>
