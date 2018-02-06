@@ -209,9 +209,13 @@
             var canvas = document.createElement('canvas');
             canvas.width = this.canvas.width;
             canvas.height = this.canvas.height;
-            var tempSignaturePad = new SignaturePad(canvas);
+            var ratio = 1 / this.currentScale;
+            var tempSignaturePad = new SignaturePad(canvas, {
+                minWidth: this.signaturePad.minWidth*ratio,
+                maxWidth: this.signaturePad.maxWidth*ratio
+            });
             tempSignaturePad.fromData(fromData);
-            tempSignaturePad.scale(1 / this.currentScale);
+            tempSignaturePad.scale(ratio);
             if (!tempSignaturePad.isEmpty())
                 return tempSignaturePad.removeBlanks();
         }

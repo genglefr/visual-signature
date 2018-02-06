@@ -114,6 +114,7 @@
         var self = this;
         var opts = options || {};
 
+        this.opts = opts;
         this.velocityFilterWeight = opts.velocityFilterWeight || 0.7;
         this.minWidth = opts.minWidth || 0.5;
         this.maxWidth = opts.maxWidth || 2.5;
@@ -619,7 +620,7 @@
 
         croppedCanvas.width  = this._canvas.width;
         croppedCanvas.height = this._canvas.height;
-        var coppedSignaturePad = new SignaturePad(croppedCanvas);
+        var coppedSignaturePad = new SignaturePad(croppedCanvas, this.opts);
         coppedSignaturePad.fromData(this.toData());
         //croppedCtx.drawImage(this._canvas, 0, 0);
 

@@ -182,6 +182,11 @@ loadSignatureButton.addEventListener("click", function (event) {
     wrapper.querySelector("[id=imageFile]").click();
 });
 
+function test() {
+    var test = digitalSignature.extractPageContent(1);
+    download(test.dataURL, 'test');
+}
+
 function download(dataURL, filename) {
     var blob = dataURLToBlob(dataURL);
     if (blob){

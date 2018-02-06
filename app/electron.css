@@ -10,6 +10,9 @@ body{
 .signature-pad--header button, input {
     -webkit-app-region: no-drag;
 }
+.signature-actions {
+    -webkit-app-region: no-drag;
+}
 .icon-min {
     background-image: url(./assets/minimize.svg);
 }
