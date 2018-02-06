@@ -206,19 +206,24 @@
     DigitalSignature.prototype.extractPageContent = function (pageNum) {
         var fromData = !pageNum || pageNum === this.currentPage ? this.signaturePad.toData() : this.history[pageNum].pointGroups;
         if (fromData) {
-            var canvas = document.createElement('canvas');
-            canvas.width = this.canvas.width;
-            canvas.height = this.canvas.height;
-            var ratio = 1 / this.currentScale;
-            var tempSignaturePad = new SignaturePad(canvas, {
-                minWidth: this.signaturePad.minWidth*ratio,
-                maxWidth: this.signaturePad.maxWidth*ratio
-            });
-            tempSignaturePad.fromData(fromData);
-            tempSignaturePad.scale(ratio);
-            if (!tempSignaturePad.isEmpty())
-                return tempSignaturePad.removeBlanks();
+            var initContent = this.scaleAndExtractContent(1 / this.currentScale, fromData);
+            var scaledContent = this.scaleAndExtractContent(4 / this.currentScale, fromData);
+            initContent.dataURL = scaledContent.dataURL;
+            return initContent;
         }
+    }
+
+    DigitalSignature.prototype.scaleAndExtractContent = function(ratio, fromData) {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.canvas.width;
+        canvas.height = this.canvas.height;
+        var tempSignaturePad = new SignaturePad(canvas, {
+            minWidth: this.signaturePad.minWidth * ratio,
+            maxWidth: this.signaturePad.maxWidth * ratio
+        });
+        tempSignaturePad.fromData(fromData);
+        tempSignaturePad.scale(ratio);
+        return tempSignaturePad.removeBlanks();
     }
 
     DigitalSignature.prototype.extractContent = function () {
