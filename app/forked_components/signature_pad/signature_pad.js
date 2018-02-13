@@ -637,7 +637,6 @@
                 if (imageData.data[index+3] > 0) {
                     pix.x.push(x);
                     pix.y.push(y);
-
                 }
             }
         }
