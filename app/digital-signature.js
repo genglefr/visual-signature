@@ -205,7 +205,7 @@
 
     DigitalSignature.prototype.extractPageContent = function (pageNum) {
         var fromData = !pageNum || pageNum === this.currentPage ? this.signaturePad.toData() : this.history[pageNum].pointGroups;
-        if (fromData && fromData.length>0) {
+        if (fromData && fromData.length > 0) {
             var initContent = this.scaleAndExtractContent(1 / this.currentScale, fromData);
             var scaledContent = this.scaleAndExtractContent(4 / this.currentScale, fromData);
             initContent.dataURL = scaledContent.dataURL;
