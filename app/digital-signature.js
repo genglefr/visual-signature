@@ -222,8 +222,8 @@
             maxWidth: this.signaturePad.maxWidth * ratio
         });
         tempSignaturePad.fromData(fromData);
-        tempSignaturePad.scale(ratio);
         if (!tempSignaturePad.isEmpty()) {
+            tempSignaturePad.scale(ratio);
             return tempSignaturePad.removeBlanks();
         }
     }
