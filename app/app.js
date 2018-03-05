@@ -51,10 +51,15 @@ function onLoadPage(digitalSignature) {
 var digitalSignature;
 wrapper.querySelector("[id=file]").onchange = function(ev) {
     var file = ev.target.files[0];
-    if (file) {
+    //if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            new DigitalSignature(canvas, e.target.result, file.name, {"onComplete":onComplete, "onProgress":onProgress, "onLoadPage":onLoadPage}).then(function(_digitalSignature){
+            new DigitalSignature(canvas, {
+                    "file" : e.target.result.byteLength > 0 ? e.target.result : null,
+                    "filename": file ? file.name : null,
+                    "onComplete":onComplete,
+                    "onProgress":onProgress,
+                    "onLoadPage":onLoadPage}).then(function(_digitalSignature){
                 /*Adapt UI*/
                 clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
@@ -64,8 +69,8 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 digitalSignature = _digitalSignature;
             });
         }
-        reader.readAsArrayBuffer(file);
-    }
+        reader.readAsArrayBuffer(file ? file : new Blob());
+    //}
 }
 
 wrapper.querySelector("[id=imageFile]").onchange = function(ev) {

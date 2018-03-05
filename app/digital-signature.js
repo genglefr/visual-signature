@@ -4,8 +4,13 @@
             (global.DigitalSignature = factory());
 }(this, (function () {'use strict';
 
-    function DigitalSignature(canvas, file, filename, options) {
+    function DigitalSignature(canvas, options) {
         var self = this;
+        if (!canvas) {
+            throw new Error("Please provide a canvas.");
+        }
+        this.canvas = canvas;
+        this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
         var opts = options || {};
         this.onProgress = opts.onProgress;
         this.onComplete = opts.onComplete;
@@ -14,9 +19,10 @@
         this.openLastPageFirst = opts.openLastPageFirst || false;
         this.currentScale = this.initScale = opts.initScale || 1.8;
         this.pdf = null;
-        this.canvas = canvas;
         this.signaturePad = this.createSignaturePad(this.canvas);
         this.currentPage = 1;
+        this.filename = opts.filename || "file.pdf";
+        this.file = opts.file || new jsPDF().output('arraybuffer');
 
         this.worker = new Worker('worker.js');
         this.worker.addEventListener('message', function (e) {
@@ -28,14 +34,13 @@
                 self.onComplete(message.value, self.pdf.filename);
             }
         }, false);
-
-        return PDFJS.getDocument(file).then(function (_pdf) {
+        return PDFJS.getDocument(this.file).then(function (_pdf) {
             self.pdf = _pdf;
             if (self.openLastPageFirst) {
                 self.currentPage = self.pdf.numPages;
             }
             self.clearHistory();
-            self.pdf.filename = filename;
+            self.pdf.filename = self.filename;
             self.loadPage(self.currentPage);
             return Promise.resolve(self);
         });
@@ -101,7 +106,7 @@
     DigitalSignature.prototype.clearHistory = function () {
         if (this.history) delete this.history;
         this.history = {};
-        for (var i = 1; i <= this.pdf.numPages; i++) {
+        for (var i = 1; i <= this.getTotalPages(); i++) {
             this.history[i] = {};
             this.history[i].pointGroups = {};
             this.history[i].images = {};
@@ -138,7 +143,7 @@
             this.history[this.currentPage].pointGroups = this.signaturePad.toData();
         }
         var promises = new Array();
-        for (var i = 1; i <= this.pdf.numPages; i++) {
+        for (var i = 1; i <= this.getTotalPages(); i++) {
             var canvas = document.createElement('canvas');
             if (modalContent) modalContent.appendChild(canvas);
             var printSignaturePad = this.createSignaturePad(canvas);
@@ -190,7 +195,7 @@
     };
 
     DigitalSignature.prototype.loadNextPage = function () {
-        if (this.currentPage < this.pdf.numPages)
+        if (this.currentPage < this.getTotalPages())
             this.loadPage(this.currentPage + 1);
     };
 
@@ -200,7 +205,7 @@
     };
 
     DigitalSignature.prototype.loadLastPage = function () {
-        this.loadPage(this.pdf.numPages);
+        this.loadPage(this.getTotalPages());
     };
 
     DigitalSignature.prototype.extractPageContent = function (pageNum) {
@@ -230,7 +235,7 @@
 
     DigitalSignature.prototype.extractContent = function () {
         var struct = {};
-        for (var i = 1; i <= this.pdf.numPages; i++) {
+        for (var i = 1; i <= this.getTotalPages(); i++) {
             struct[i] = this.extractPageContent(i);
         }
         return struct;
@@ -339,7 +344,7 @@
     }
 
     DigitalSignature.prototype.applyOnAllPages = function () {
-        for (var i = 1; i <= this.pdf.numPages; i++) {
+        for (var i = 1; i <= this.getTotalPages(); i++) {
             if (this.currentPage != i) {
                 var temp = {};
                 temp.pointGroups = !this.signaturePad.isEmpty() ? this.signaturePad.toData() : {};
