@@ -21,6 +21,7 @@
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
         this.pdf = null;
         this.signaturePad = this.createSignaturePad(this.canvas);
+        this.signaturePad.off();
         this.currentPage = 1;
         this.filename = opts.filename || "file.pdf";
         this.file = opts.file || new jsPDF().output('arraybuffer');
@@ -35,9 +36,6 @@
                 self.onComplete(message.value, self.pdf.filename);
             }
         }, false);
-        if (!this.enableTouchOnLoad) {
-            this.signaturePad.off();
-        }
         return PDFJS.getDocument(this.file).then(function (_pdf) {
             self.pdf = _pdf;
             if (self.openLastPageFirst) {
@@ -46,6 +44,9 @@
             self.clearHistory();
             self.pdf.filename = self.filename;
             self.loadPage(self.currentPage);
+            if (self.enableTouchOnLoad) {
+                self.signaturePad.on();
+            }
             return Promise.resolve(self);
         });
     }
