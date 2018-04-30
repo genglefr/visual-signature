@@ -86,6 +86,10 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
     }
 }
 
+wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
+    digitalSignature.enableTouch(ev.target.checked);
+}
+
 saveSignatureButton.addEventListener("click", function (event) {
     adaptUiForImageChange(false);
     digitalSignature.saveImage();

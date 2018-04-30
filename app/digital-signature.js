@@ -18,6 +18,7 @@
         this.penColor = opts.penColor || "#2b2bff";
         this.openLastPageFirst = opts.openLastPageFirst || false;
         this.currentScale = this.initScale = opts.initScale || 1.8;
+        this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
         this.pdf = null;
         this.signaturePad = this.createSignaturePad(this.canvas);
         this.currentPage = 1;
@@ -34,6 +35,9 @@
                 self.onComplete(message.value, self.pdf.filename);
             }
         }, false);
+        if (!this.enableTouchOnLoad) {
+            this.signaturePad.off();
+        }
         return PDFJS.getDocument(this.file).then(function (_pdf) {
             self.pdf = _pdf;
             if (self.openLastPageFirst) {
@@ -370,6 +374,14 @@
                 }
                 this.history[i] = temp;
             }
+        }
+    }
+
+    DigitalSignature.prototype.enableTouch = function (enable) {
+        if (enable) {
+            this.signaturePad.on();
+        } else {
+            this.signaturePad.off();
         }
     }
 
