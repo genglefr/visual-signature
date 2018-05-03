@@ -1,6 +1,7 @@
 var wrapper = document.getElementById("signature-pad");
 var currentPageWrapper = wrapper.querySelector("[name=current-page]");
 var clearButton = wrapper.querySelector("[data-action=clear]");
+var undoButton = wrapper.querySelector("[data-action=undo]");
 var resetButton = wrapper.querySelector("[data-action=reset]");
 var copyAllButton = wrapper.querySelector("[data-action=copy-all]");
 var saveSignatureButton = wrapper.querySelector("[data-action=save-sign]");
@@ -61,8 +62,9 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                     "onProgress":onProgress,
                     "onLoadPage":onLoadPage}).then(function(_digitalSignature){
                 /*Adapt UI*/
-                clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
+                undoButton.disabled =clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
+                pdfNavWrapper.style.cssText = "";
                 pdfNavWrapper.style.display = "inline-block";
                 bodyWrapper.style.display = "block";
                 range.value = 100;
@@ -89,7 +91,7 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
 wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
     digitalSignature.enableTouch(ev.target.checked);
     if (ev.target.checked) {
-        bodyWrapper.style.opacity = 0.5;
+        bodyWrapper.style.opacity = 0.4;
     } else {
         bodyWrapper.style.opacity = 1;
     }
@@ -179,6 +181,10 @@ saveSignatureButton.addEventListener("click", function (event) {
     console.log("y axis: "+result.y);
     download(result.dataURL, "signature.png");
 });*/
+
+undoButton.addEventListener("click", function (event) {
+    digitalSignature.undo();
+});
 
 clearButton.addEventListener("click", function (event) {
     digitalSignature.reset(digitalSignature.getCurrentPage());

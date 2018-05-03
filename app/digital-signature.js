@@ -386,5 +386,10 @@
         }
     }
 
+    DigitalSignature.prototype.undo = function () {
+        this.signaturePad._data.pop();
+        this.loadPage(this.currentPage);
+    }
+
     return DigitalSignature;
 })));

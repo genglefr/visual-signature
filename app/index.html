@@ -29,6 +29,7 @@
         <div class="main-actions">
           <button type="button" class="button icon icon-load" data-action="change" title="Load new file">&nbsp;</button>
           <button type="button" class="button icon icon-signature" data-action="signature" disabled="disabled" title="Load new signature">&nbsp;</button>
+          <button type="button" class="button icon icon-undo" data-action="undo" disabled="disabled" title="Undo last modification">&nbsp;</button>
           <button type="button" class="button icon icon-delete" data-action="clear" disabled="disabled" title="Discard modifications on current page">&nbsp;</button>
           <button type="button" class="button icon icon-reset" data-action="reset" disabled="disabled" title="Discard modifications and reload file">&nbsp;</button>
           <!--<button type="button" class="button icon icon-png" data-action="save-png" disabled="disabled">&nbsp;</button>
@@ -49,7 +50,7 @@
           <span name="current-page"></span>
           <button type="button" class="button icon icon-next" data-action="next-page" title="Go to next page">&nbsp;</button>
           <button type="button" class="button icon icon-last-page" data-action="last-page" title="Go to last page">&nbsp;</button>
-          <input type="range" id="scale" name="scale" min="25" max="175" value="100"/>
+          <input type="range" id="scale" name="scale" min="25" max="175" value="100" style="visibility: hidden"/>
           <span name="range-label" style="margin-left:20px; visibility: hidden"></span>
         </div>
         <div style="display: none !important;text-align:center" class="signature-actions">
@@ -72,7 +73,7 @@
         </div>
       </div>
     </div>
-    <div class="signature-pad--body">
+    <div class="signature-pad--body" style="transition: opacity 0.5s ease-in-out;">
       <canvas></canvas>
     </div>
   </div>
@@ -87,6 +88,7 @@
   <script src="forked_components/signature_pad/signature_pad.js"></script>
   <script src="forked_components/jspdf/jspdf.js"></script>
   <script src="digital-signature.js"></script>
+  <script src="touch-canvas.js"></script>
   <script src="app.js"></script>
   <script src="electron.js"></script>
 </body>

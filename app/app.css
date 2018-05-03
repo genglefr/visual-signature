@@ -353,6 +353,12 @@ progress[value]::-webkit-progress-value {
 .icon-discard {
   background-image: url(./assets/discard.svg);
 }
+.icon-undo {
+  background-image: url(./assets/undo.svg);
+}
+.icon-undo:disabled {
+  background-image: url(./assets/undo-disabled.svg);
+}
 
 /* The switch - the box around the slider */
 .switch {
@@ -392,11 +398,11 @@ progress[value]::-webkit-progress-value {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: rgba(92,45,145,0.9);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px rgba(92,45,145,0.9);
 }
 
 input:checked + .slider:before {
