@@ -66,7 +66,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 /*Ugly hack for IE*/
                 pdfNavWrapper.style.cssText = "";
                 pdfNavWrapper.style.display = "inline-block";
-                bodyWrapper.style.display = "block";
+                bodyWrapper.style.display = "inline-block";
                 range.value = 100;
                 digitalSignature = _digitalSignature;
             });

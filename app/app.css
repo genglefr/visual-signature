@@ -26,6 +26,7 @@ body {
 }
 
 .signature-pad {
+  width:100%;
   position: relative;
   /*max-width: 928px;*/
   -webkit-box-orient: vertical;
@@ -34,36 +35,9 @@ body {
   flex-direction: column;
   font-size: 10px;
   /*border: 1px solid #e8e8e8;*/
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
-  border-radius: 4px;
   /*padding: 16px;*/
   margin-top: 80px;
   margin-bottom: 50px;
-}
-
-.signature-pad::before,
-.signature-pad::after {
-  position: absolute;
-  z-index: -1;
-  content: "";
-  width: 40%;
-  height: 10px;
-  bottom: 15px;
-  background: transparent;
-  box-shadow: 0 11px 12px rgba(0, 0, 0, 0.4);
-}
-
-.signature-pad::before {
-  left: 20px;
-  -webkit-transform: skew(-2deg) rotate(-2deg);
-  transform: skew(-2deg) rotate(-2deg);
-}
-
-.signature-pad::after {
-  right: 20px;
-  -webkit-transform: skew(2deg) rotate(2deg);
-  transform: skew(2deg) rotate(2deg);
 }
 
 .signature-pad--body {
@@ -75,6 +49,9 @@ body {
   /*border: 1px dotted #b3b3b3;*/
   overflow: hidden;
   text-align: center;
+  transition: opacity 0.5s ease-in-out;
+  overflow:auto;
+  width:100%
   /*margin-bottom: -2px;*/
 }
 
@@ -96,7 +73,7 @@ canvas {
   height: auto;
   border-radius: 4px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
-  display: block;
+  display: inline-block;
 }
 .temp-canvas{
   position: absolute;
