@@ -243,3 +243,9 @@ function dataURLToBlob(dataURL) {
         return new Blob([uInt8Array], { type: contentType });
     }
 }
+
+window.addEventListener('orientationchange', function () {
+    if (digitalSignature) {
+        digitalSignature.orientationChange();
+    }
+});

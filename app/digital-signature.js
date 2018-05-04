@@ -2,7 +2,8 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
             (global.DigitalSignature = factory());
-}(this, (function () {'use strict';
+}(this, (function () {
+    'use strict';
 
     function DigitalSignature(canvas, options) {
         var self = this;
@@ -17,8 +18,9 @@
         this.onLoadPage = opts.onLoadPage;
         this.penColor = opts.penColor || "#2b2bff";
         this.openLastPageFirst = opts.openLastPageFirst || false;
-        this.currentScale = this.initScale = opts.initScale || 1.8;
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
+        this.currentScale = this.initScale = 0;
+        this.initWidth = 0;
         this.pdf = null;
         this.signaturePad = this.createSignaturePad(this.canvas);
         this.signaturePad.off();
@@ -64,12 +66,14 @@
         this.currentPage = pageNum;
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
+            self.initWidth = self.canvas.clientWidth;
         });
     };
 
     DigitalSignature.prototype.renderPage = function (pageNum, _canvas, _signaturePad) {
         var self = this;
         return this.pdf.getPage(pageNum).then(function (page) {
+            self.currentScale = self.initScale = _canvas.clientWidth / page.getViewport(1.0).width;
             var viewport = page.getViewport(self.currentScale);
             _canvas.width = viewport.width;
             _canvas.height = viewport.height;
@@ -78,7 +82,7 @@
                 viewport: viewport
             };
             return page.render(renderContext).then(function () {
-                if (self.history[pageNum].images){
+                if (self.history[pageNum].images) {
                     var keys = Object.keys(self.history[pageNum].images);
                     for (var i = 0; i < keys.length; i++) {
                         var key = keys[i];
@@ -223,7 +227,7 @@
         }
     }
 
-    DigitalSignature.prototype.scaleAndExtractContent = function(ratio, fromData) {
+    DigitalSignature.prototype.scaleAndExtractContent = function (ratio, fromData) {
         var canvas = document.createElement('canvas');
         canvas.width = this.canvas.width;
         canvas.height = this.canvas.height;
@@ -253,11 +257,11 @@
     DigitalSignature.prototype.drawImage = function (imageFile) {
         var self = this;
         var canvas = document.createElement('canvas');
-        canvas.cumulativeOffset = function() {
+        canvas.cumulativeOffset = function () {
             var top = 0, left = 0;
             var element = this;
             do {
-                top += element.offsetTop  || 0;
+                top += element.offsetTop || 0;
                 left += element.offsetLeft || 0;
                 element = element.offsetParent;
             } while (element);
@@ -272,77 +276,78 @@
         document.querySelector("[class=signature-pad--body]").appendChild(canvas);
         var ctx = canvas.getContext('2d');
         var img = new Image();
-        canvas.onmousedown = function(e){
+        canvas.onmousedown = function (e) {
             //this.canMouseX=parseInt(e.clientX-offsetX);
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // set the drag flag
             this.isDragging = true;
         }
-        canvas.onmousemove = function(e){
-            this.canMouseX=parseInt(e.clientX+window.scrollX);
-            this.canMouseY=parseInt(e.clientY+window.scrollY);
+        canvas.onmousemove = function (e) {
+            this.canMouseX = parseInt(e.clientX + window.scrollX);
+            this.canMouseY = parseInt(e.clientY + window.scrollY);
 
             // if the drag flag is set, clear the canvas and draw the image
-            if (this.isDragging){
+            if (this.isDragging) {
                 var cumulativeOffset = canvas.cumulativeOffset();
-                this.draw(img, this.canMouseX-(img.width/2)-cumulativeOffset.left, this.canMouseY-(img.height/2)-cumulativeOffset.top);
+                this.draw(img, this.canMouseX - (img.width / 2) - cumulativeOffset.left, this.canMouseY - (img.height / 2) - cumulativeOffset.top);
             }
         }
-        canvas.onmouseup = function(e){
+        canvas.onmouseup = function (e) {
             //this.canMouseX=parseInt(e.clientX-offsetX);
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // clear the drag flag
             this.isDragging = false;
         }
-        canvas.onmouseout = function(e){
+        canvas.onmouseout = function (e) {
             //this.canMouseX=parseInt(e.clientX-offsetX);
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // user has left the canvas, so clear the drag flag
             this.isDragging = false;
         }
-        canvas.draw = function(image, offsetX, offsetY){
-            ctx.clearRect(0,0,canvas.width,canvas.height);
+        canvas.draw = function (image, offsetX, offsetY) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.imageOptions = {
-                "image" : image,
-                "offsetX" : offsetX,
-                "offsetY" : offsetY
+                "image": image,
+                "offsetX": offsetX,
+                "offsetY": offsetY
             }
-            ctx.drawImage(image,offsetX,offsetY,img.width,img.height);
+            ctx.drawImage(image, offsetX, offsetY, img.width, img.height);
         }
 
         this.tempCanvas = canvas;
-        img.onload = function() {
-            canvas.draw(this,(canvas.width/2)-(img.width/2),(canvas.height/2)-(img.height/2));
+        img.onload = function () {
+            canvas.draw(this, (canvas.width / 2) - (img.width / 2), (canvas.height / 2) - (img.height / 2));
         };
         img.src = imageFile;
     };
 
     DigitalSignature.prototype.scaleImage = function (percent) {
-        if (this.tempCanvas){
+        if (this.tempCanvas) {
             if (!this.tempCanvas.imageOptions.image.initWidth && !this.tempCanvas.imageOptions.image.initHeight) {
                 this.tempCanvas.imageOptions.image.initWidth = this.tempCanvas.imageOptions.image.width;
                 this.tempCanvas.imageOptions.image.initHeight = this.tempCanvas.imageOptions.image.height;
             }
-            this.tempCanvas.imageOptions.image.width = this.tempCanvas.imageOptions.image.initWidth*(percent/100);
-            this.tempCanvas.imageOptions.image.height = this.tempCanvas.imageOptions.image.initHeight*(percent/100);
+            this.tempCanvas.imageOptions.image.width = this.tempCanvas.imageOptions.image.initWidth * (percent / 100);
+            this.tempCanvas.imageOptions.image.height = this.tempCanvas.imageOptions.image.initHeight * (percent / 100);
             this.tempCanvas.draw(this.tempCanvas.imageOptions.image, this.tempCanvas.imageOptions.offsetX, this.tempCanvas.imageOptions.offsetY);
         }
     }
 
     DigitalSignature.prototype.saveImage = function () {
-        if (this.tempCanvas){
+        if (this.tempCanvas) {
             var length = Object.keys(this.history[this.currentPage].images).length;
             this.history[this.currentPage].images[length] = {
                 "image": this.tempCanvas.imageOptions.image,
                 "offsetX": this.tempCanvas.imageOptions.offsetX,
-                "offsetY": this.tempCanvas.imageOptions.offsetY};
+                "offsetY": this.tempCanvas.imageOptions.offsetY
+            };
             this.tempCanvas.remove();
             this.loadPage(this.currentPage);
         }
     }
 
     DigitalSignature.prototype.cancelImage = function () {
-        if (this.tempCanvas){
+        if (this.tempCanvas) {
             this.tempCanvas.remove();
             this.loadPage(this.currentPage);
         }
@@ -389,6 +394,18 @@
     DigitalSignature.prototype.undo = function () {
         this.signaturePad._data.pop();
         this.loadPage(this.currentPage);
+    }
+
+    DigitalSignature.prototype.orientationChange = function (ev) {
+        var self = this;
+        var afterOrientationChange = function() {
+            var ratio = self.canvas.clientWidth / self.initWidth;
+            self.signaturePad.scale(ratio);
+            self.scaleHistory(ratio);
+            self.loadPage(self.currentPage);
+            window.removeEventListener('resize', afterOrientationChange);
+        };
+        window.addEventListener('resize', afterOrientationChange);
     }
 
     return DigitalSignature;
