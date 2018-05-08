@@ -68,6 +68,10 @@
         var prevTransition = self.canvas.parentNode.style.transition;
         self.canvas.parentNode.style.transition = "unset";
         self.canvas.parentNode.style.opacity = 0;
+        window.scrollTo({
+            top: self.canvas.parentNode.scrollTop,
+            behavior: "smooth"
+        });
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.initWidth = self.canvas.clientWidth;
