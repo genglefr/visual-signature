@@ -64,9 +64,15 @@
             console.log("should not happen");
         }
         this.currentPage = pageNum;
+        var prevOpacity = self.canvas.parentNode.style.opacity;
+        var prevTransition = self.canvas.parentNode.style.transition;
+        self.canvas.parentNode.style.transition = "unset";
+        self.canvas.parentNode.style.opacity = 0;
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.initWidth = self.canvas.clientWidth;
+            self.canvas.parentNode.style.transition = prevTransition;
+            self.canvas.parentNode.style.opacity = prevOpacity;
         });
     };
 
