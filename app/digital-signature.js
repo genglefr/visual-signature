@@ -154,6 +154,8 @@
         var promises = new Array();
         for (var i = 1; i <= this.getTotalPages(); i++) {
             var canvas = document.createElement('canvas');
+            canvas.width = this.canvas.width - 50;
+            canvas.height = this.canvas.height - 50;
             if (modalContent) modalContent.appendChild(canvas);
             var printSignaturePad = this.createSignaturePad(canvas);
             promises.push(this.renderPage(i, canvas, printSignaturePad));
