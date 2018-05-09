@@ -14,7 +14,6 @@ var printButton = wrapper.querySelector("[data-action=print]");
 var changeButton = wrapper.querySelector("[data-action=change]");
 var lastPageButton = wrapper.querySelector("[data-action=last-page]");
 var loadSignatureButton = wrapper.querySelector("[data-action=signature]");
-var canvas = wrapper.querySelector("canvas");
 var progressBarWrapper = wrapper.querySelector("[class=signature-pad--progress]");
 var bodyWrapper = wrapper.querySelector("[class=signature-pad--body]");
 var pdfNavWrapper = wrapper.querySelector("[class=pdf-nav]");
@@ -55,7 +54,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
     //if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            new DigitalSignature(canvas, {
+            new DigitalSignature(bodyWrapper, {
                     "file" : e.target.result.byteLength > 0 ? e.target.result : null,
                     "filename": file ? file.name : null,
                     "onComplete":onComplete,
@@ -66,7 +65,6 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 /*Ugly hack for IE*/
                 pdfNavWrapper.style.cssText = "";
                 pdfNavWrapper.style.display = "inline-block";
-                bodyWrapper.style.display = "inline-block";
                 range.value = 100;
                 digitalSignature = _digitalSignature;
             });
@@ -90,11 +88,6 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
 
 wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
     digitalSignature.enableTouch(ev.target.checked);
-    if (ev.target.checked) {
-        bodyWrapper.style.opacity = 0.4;
-    } else {
-        bodyWrapper.style.opacity = 1;
-    }
 }
 
 saveSignatureButton.addEventListener("click", function (event) {

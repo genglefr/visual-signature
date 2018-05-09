@@ -5,12 +5,15 @@
 }(this, (function () {
     'use strict';
 
-    function DigitalSignature(canvas, options) {
+    function DigitalSignature(container, options) {
         var self = this;
-        if (!canvas) {
-            throw new Error("Please provide a canvas.");
+        if (!container || container.tagName.toLowerCase() != "div") {
+            console.log(container.tagName);
+            throw new Error("Please provide a <div> container.");
         }
-        this.canvas = canvas;
+        this.canvas = document.createElement('canvas');
+        this.empty(container);
+        container.appendChild(this.canvas);
         this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
         var opts = options || {};
         this.onProgress = opts.onProgress;
@@ -49,8 +52,13 @@
             if (self.enableTouchOnLoad) {
                 self.signaturePad.on();
             }
+            self.canvas.parentNode.style.display = "inline-block";
             return Promise.resolve(self);
         });
+    }
+
+    DigitalSignature.prototype.empty = function (element) {
+        while (element.firstChild) element.removeChild(element.firstChild);
     }
 
     DigitalSignature.prototype.loadPage = function (pageNum) {
@@ -398,8 +406,10 @@
     DigitalSignature.prototype.enableTouch = function (enable) {
         if (enable) {
             this.signaturePad.on();
+            this.canvas.parentNode.style.opacity = 0.4;
         } else {
             this.signaturePad.off();
+            this.canvas.parentNode.style.opacity = 1;
         }
     }
 
