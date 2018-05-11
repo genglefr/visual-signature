@@ -140,9 +140,17 @@ printButton.addEventListener("click", function (event) {
     digitalSignature.renderPages(modalContent);
     var span = modal.querySelector("[class=close]");
     span.addEventListener("click", function (event) {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
         modalContent.innerHTML='';
         modal.style.display = "none";
         wrapper.style.display = "block";
+    });
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
     modal.style.display = "block";
     wrapper.style.display = "none";

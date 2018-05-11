@@ -8,7 +8,6 @@
     function DigitalSignature(container, options) {
         var self = this;
         if (!container || container.tagName.toLowerCase() != "div") {
-            console.log(container.tagName);
             throw new Error("Please provide a <div> container.");
         }
         this.canvas = document.createElement('canvas');
@@ -61,7 +60,7 @@
         while (element.firstChild) element.removeChild(element.firstChild);
     }
 
-    DigitalSignature.prototype.loadPage = function (pageNum) {
+    DigitalSignature.prototype.loadPage = function (pageNum, avoidScroll) {
         var self = this;
         if (this.signaturePad) {
             if (!this.signaturePad.isEmpty()) {
@@ -76,10 +75,12 @@
         var prevTransition = self.canvas.parentNode.style.transition;
         self.canvas.parentNode.style.transition = "unset";
         self.canvas.parentNode.style.opacity = 0;
-        window.scrollTo({
-            top: self.canvas.parentNode.scrollTop,
-            behavior: "smooth"
-        });
+        if (!avoidScroll) {
+            window.scrollTo({
+                top: self.canvas.parentNode.scrollTop,
+                behavior: "smooth"
+            });
+        }
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.initWidth = self.canvas.clientWidth;
@@ -91,7 +92,8 @@
     DigitalSignature.prototype.renderPage = function (pageNum, _canvas, _signaturePad) {
         var self = this;
         return this.pdf.getPage(pageNum).then(function (page) {
-            self.currentScale = self.initScale = _canvas.clientWidth / page.getViewport(1.0).width;
+            var containerWidth = _canvas.clientWidth > 0 ? _canvas.clientWidth : _canvas.width;
+            self.currentScale = self.initScale = containerWidth / page.getViewport(1.0).width;
             var viewport = page.getViewport(self.currentScale);
             _canvas.width = viewport.width;
             _canvas.height = viewport.height;
@@ -415,7 +417,7 @@
 
     DigitalSignature.prototype.undo = function () {
         this.signaturePad._data.pop();
-        this.loadPage(this.currentPage);
+        this.loadPage(this.currentPage, true);
     }
 
     DigitalSignature.prototype.orientationChange = function (ev) {

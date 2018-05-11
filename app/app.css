@@ -162,6 +162,7 @@ canvas {
   position: fixed;
   right: 30px;
   top: 0;
+  z-index: 1;
 }
 
 .close:hover,
