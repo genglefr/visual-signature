@@ -91,7 +91,7 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
 
 wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
     if (ev.target.checked) {
-        bodyWrapper.firstChild.style.boxShadow = "0px 0px 20px #7615e5e6";
+        bodyWrapper.firstChild.style.boxShadow = "0px 0px 20px #7615e5";
     } else {
         bodyWrapper.firstChild.style.boxShadow = "";
     }
