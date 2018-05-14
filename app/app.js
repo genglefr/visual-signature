@@ -54,12 +54,15 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
     //if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            new DigitalSignature(bodyWrapper, {
-                    "file" : e.target.result.byteLength > 0 ? e.target.result : null,
-                    "filename": file ? file.name : null,
-                    "onComplete":onComplete,
-                    "onProgress":onProgress,
-                    "onLoadPage":onLoadPage}).then(function(_digitalSignature){
+            new DigitalSignature(
+                    bodyWrapper,
+                        {
+                        "file" : e.target.result.byteLength > 0 ? e.target.result : null,
+                        "filename": file ? file.name : null,
+                        "onComplete":onComplete,
+                        "onProgress":onProgress,
+                        "onLoadPage":onLoadPage
+                        }).then(function(_digitalSignature){
                 /*Adapt UI*/
                 undoButton.disabled =clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
@@ -87,6 +90,11 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
 }
 
 wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
+    if (ev.target.checked) {
+        bodyWrapper.firstChild.style.boxShadow = "0px 0px 20px #7615e5e6";
+    } else {
+        bodyWrapper.firstChild.style.boxShadow = "";
+    }
     digitalSignature.enableTouch(ev.target.checked);
 }
 

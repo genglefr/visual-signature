@@ -408,10 +408,8 @@
     DigitalSignature.prototype.enableTouch = function (enable) {
         if (enable) {
             this.signaturePad.on();
-            this.canvas.parentNode.style.filter = "drop-shadow(0px 0px 15px #7615e5e6)";
         } else {
             this.signaturePad.off();
-            this.canvas.parentNode.style.filter = "";
         }
     }
 

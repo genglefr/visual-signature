@@ -50,8 +50,7 @@ body {
   transition: opacity 0.5s ease-in-out, filter 0.5s ease-in-out;
   overflow:auto;
   width:100%;
-  padding-left:10px;
-  padding-right:10px;
+  padding:10px;
 }
 
 #scale{
@@ -71,8 +70,8 @@ canvas {
   width: 100%;
   height: auto;
   border-radius: 4px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
   display: inline-block;
+  transition: box-shadow 0.5s ease-in-out;
 }
 .temp-canvas{
   position: absolute;
