@@ -259,7 +259,6 @@ window.addEventListener('orientationchange', function () {
     }
 });
 
-
 /*
 var resizeTimer;
 window.addEventListener('resize', function() {
