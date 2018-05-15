@@ -419,6 +419,7 @@
     }
 
     DigitalSignature.prototype.orientationChange = function (ev) {
+        window.removeEventListener('orientationchange', this.orientationChange);
         var self = this;
         var afterOrientationChange = function() {
             var ratio = self.canvas.clientWidth / self.initWidth;
@@ -426,6 +427,7 @@
             self.scaleHistory(ratio);
             self.loadPage(self.currentPage);
             window.removeEventListener('resize', afterOrientationChange);
+            window.addEventListener('orientationchange', this.orientationChange);
         };
         window.addEventListener('resize', afterOrientationChange);
     }
