@@ -258,3 +258,14 @@ window.addEventListener('orientationchange', function () {
         digitalSignature.orientationChange();
     }
 });
+
+
+/*
+var resizeTimer;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        digitalSignature.loadPage(digitalSignature.getCurrentPage());
+    }, 500);
+});
+*/
