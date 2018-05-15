@@ -253,16 +253,16 @@ function dataURLToBlob(dataURL) {
     }
 }
 
-/*window.addEventListener('orientationchange', function () {
+window.addEventListener('orientationchange', function () {
     if (digitalSignature) {
         digitalSignature.orientationChange();
     }
-});*/
+});
 
-window.addEventListener('resize', function () {
+/*window.addEventListener('resize', function () {
     if (digitalSignature) {
         digitalSignature.onResize(500);
     }
-});
+});*/
 
 
