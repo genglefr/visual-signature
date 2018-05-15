@@ -105,7 +105,7 @@
                 viewport: viewport
             };
             return page.render(renderContext).then(function () {
-                if (self.initWidth && self.initWidth != containerWidth) {
+                if (self.initWidth != containerWidth) {
                     var ratio = containerWidth / self.initWidth;
                     self.signaturePad.scale(ratio);
                     self.scaleHistory(ratio);
