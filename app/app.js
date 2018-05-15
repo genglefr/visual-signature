@@ -253,18 +253,16 @@ function dataURLToBlob(dataURL) {
     }
 }
 
-window.addEventListener('orientationchange', function () {
+/*window.addEventListener('orientationchange', function () {
     if (digitalSignature) {
         digitalSignature.orientationChange();
     }
+});*/
+
+window.addEventListener('resize', function () {
+    if (digitalSignature) {
+        digitalSignature.onResize(500);
+    }
 });
 
-/*
-var resizeTimer;
-window.addEventListener('resize', function() {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-        digitalSignature.loadPage(digitalSignature.getCurrentPage());
-    }, 500);
-});
-*/
+

@@ -104,13 +104,9 @@
                 canvasContext: _canvas.getContext('2d'),
                 viewport: viewport
             };
-            if (self.renderTask) {
-                self.renderTask.cancel();
-            }
-            self.renderTask = page.render(renderContext);
-            return self.renderTask.then(function () {
-                if (self.initWidth && self.initWidth != self.canvas.clientWidth) {
-                    var ratio = self.canvas.clientWidth / self.initWidth;
+            return page.render(renderContext).then(function () {
+                if (self.initWidth && self.initWidth != containerWidth) {
+                    var ratio = containerWidth / self.initWidth;
                     self.signaturePad.scale(ratio);
                     self.scaleHistory(ratio);
                 }
@@ -433,14 +429,22 @@
     }
 
     DigitalSignature.prototype.orientationChange = function (ev) {
-        window.removeEventListener('orientationchange', this.orientationChange);
         var self = this;
         var afterOrientationChange = function() {
             self.loadPage(self.currentPage);
             window.removeEventListener('resize', afterOrientationChange);
-            window.addEventListener('orientationchange', this.orientationChange);
         };
         window.addEventListener('resize', afterOrientationChange);
+    }
+
+    DigitalSignature.prototype.onResize = function (delay) {
+        var self = this;
+        self.canvas.parentNode.style.transition = "unset";
+        self.canvas.parentNode.style.opacity = 0;
+        clearTimeout(self.resizeTimer);
+        self.resizeTimer = setTimeout(function() {
+            self.loadPage(self.currentPage);
+        }, delay);
     }
 
     return DigitalSignature;
