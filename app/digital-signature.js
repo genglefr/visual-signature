@@ -30,6 +30,9 @@
         this.filename = opts.filename || "file.pdf";
         this.file = opts.file || new jsPDF().output('arraybuffer');
 
+        this.parentNodeOpacity = this.canvas.parentNode.style.opacity;
+        this.parentNodeTransition = this.canvas.parentNode.style.transition;
+
         this.worker = new Worker('worker.js');
         this.worker.addEventListener('message', function (e) {
             var message = e.data;
@@ -71,21 +74,21 @@
             console.log("should not happen");
         }
         this.currentPage = pageNum;
-        var prevOpacity = self.canvas.parentNode.style.opacity;
-        var prevTransition = self.canvas.parentNode.style.transition;
-        self.canvas.parentNode.style.transition = "unset";
-        self.canvas.parentNode.style.opacity = 0;
         if (!avoidScroll) {
             window.scrollTo({
                 top: self.canvas.parentNode.scrollTop,
                 behavior: "smooth"
             });
         }
+        self.canvas.parentNode.style.transition = "unset";
+        self.canvas.parentNode.style.opacity = 0;
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.initWidth = self.canvas.clientWidth;
-            self.canvas.parentNode.style.transition = prevTransition;
-            self.canvas.parentNode.style.opacity = prevOpacity;
+            self.canvas.parentNode.style.transition = self.parentNodeTransition;
+            self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
+        }).catch(function(e) {
+            //Rendering task cancelled
         });
     };
 
@@ -101,7 +104,16 @@
                 canvasContext: _canvas.getContext('2d'),
                 viewport: viewport
             };
-            return page.render(renderContext).then(function () {
+            if (self.renderTask) {
+                self.renderTask.cancel();
+            }
+            self.renderTask = page.render(renderContext);
+            return self.renderTask.then(function () {
+                if (self.initWidth && self.initWidth != self.canvas.clientWidth) {
+                    var ratio = self.canvas.clientWidth / self.initWidth;
+                    self.signaturePad.scale(ratio);
+                    self.scaleHistory(ratio);
+                }
                 if (self.history[pageNum].images) {
                     var keys = Object.keys(self.history[pageNum].images);
                     for (var i = 0; i < keys.length; i++) {
@@ -114,6 +126,8 @@
                     _signaturePad.fromData(self.history[pageNum].pointGroups);
                 }
                 return Promise.resolve(_signaturePad);
+            }).catch(function(e){
+                return Promise.reject(e);
             });
         });
     };
@@ -422,9 +436,6 @@
         window.removeEventListener('orientationchange', this.orientationChange);
         var self = this;
         var afterOrientationChange = function() {
-            var ratio = self.canvas.clientWidth / self.initWidth;
-            self.signaturePad.scale(ratio);
-            self.scaleHistory(ratio);
             self.loadPage(self.currentPage);
             window.removeEventListener('resize', afterOrientationChange);
             window.addEventListener('orientationchange', this.orientationChange);
