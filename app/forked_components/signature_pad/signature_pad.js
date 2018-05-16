@@ -20,7 +20,8 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
             (global.SignaturePad = factory());
-}(this, (function () { 'use strict';
+}(this, (function () {
+    'use strict';
 
     function Point(x, y, time) {
         this.x = x;
@@ -197,7 +198,9 @@
         var canvas = this._canvas;
 
         ctx.fillStyle = this.backgroundColor;
-        if(typeof(clearRect) == undefined || clearRect){ ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        if (typeof(clearRect) == undefined || clearRect) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         this._data = [];
@@ -382,7 +385,7 @@
             // so that we always have no more than 4 points in points array.
             points.shift();
 
-            return { curve: curve, widths: widths };
+            return {curve: curve, widths: widths};
         }
 
         return {};
@@ -394,8 +397,8 @@
         var dx2 = s2.x - s3.x;
         var dy2 = s2.y - s3.y;
 
-        var m1 = { x: (s1.x + s2.x) / 2.0, y: (s1.y + s2.y) / 2.0 };
-        var m2 = { x: (s2.x + s3.x) / 2.0, y: (s2.y + s3.y) / 2.0 };
+        var m1 = {x: (s1.x + s2.x) / 2.0, y: (s1.y + s2.y) / 2.0};
+        var m2 = {x: (s2.x + s3.x) / 2.0, y: (s2.y + s3.y) / 2.0};
 
         var l1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
         var l2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
@@ -404,7 +407,7 @@
         var dym = m1.y - m2.y;
 
         var k = l2 / (l1 + l2);
-        var cm = { x: m2.x + dxm * k, y: m2.y + dym * k };
+        var cm = {x: m2.x + dxm * k, y: m2.y + dym * k};
 
         var tx = s2.x - cm.x;
         var ty = s2.y - cm.y;
@@ -418,7 +421,7 @@
     SignaturePad.prototype._calculateCurveWidths = function (curve) {
         var startPoint = curve.startPoint;
         var endPoint = curve.endPoint;
-        var widths = { start: null, end: null };
+        var widths = {start: null, end: null};
 
         var velocity = this.velocityFilterWeight * endPoint.velocityFrom(startPoint) + (1 - this.velocityFilterWeight) * this._lastVelocity;
 
@@ -616,33 +619,37 @@
     SignaturePad.prototype.removeBlanks = function (format) {
         // First duplicate the canvas to not alter the original
         var croppedCanvas = document.createElement('canvas'),
-            croppedCtx    = croppedCanvas.getContext('2d');
+            croppedCtx = croppedCanvas.getContext('2d');
 
-        croppedCanvas.width  = this._canvas.width;
+        croppedCanvas.width = this._canvas.width;
         croppedCanvas.height = this._canvas.height;
         var coppedSignaturePad = new SignaturePad(croppedCanvas, this.opts);
         coppedSignaturePad.fromData(this.toData());
         //croppedCtx.drawImage(this._canvas, 0, 0);
 
         // Next do the actual cropping
-        var w         = croppedCanvas.width,
-            h         = croppedCanvas.height,
-            pix       = {x:[], y:[]},
-            imageData = croppedCtx.getImageData(0,0,croppedCanvas.width,croppedCanvas.height),
+        var w = croppedCanvas.width,
+            h = croppedCanvas.height,
+            pix = {x: [], y: []},
+            imageData = croppedCtx.getImageData(0, 0, croppedCanvas.width, croppedCanvas.height),
             x, y, index;
 
         for (y = 0; y < h; y++) {
             for (x = 0; x < w; x++) {
                 index = (y * w + x) * 4;
-                if (imageData.data[index+3] > 0) {
+                if (imageData.data[index + 3] > 0) {
                     pix.x.push(x);
                     pix.y.push(y);
                 }
             }
         }
-        pix.x.sort(function(a,b){return a-b});
-        pix.y.sort(function(a,b){return a-b});
-        var n = pix.x.length-1;
+        pix.x.sort(function (a, b) {
+            return a - b
+        });
+        pix.y.sort(function (a, b) {
+            return a - b
+        });
+        var n = pix.x.length - 1;
 
         w = pix.x[n] - pix.x[0];
         h = pix.y[n] - pix.y[0];
@@ -651,25 +658,25 @@
         croppedCanvas.width = w;
         croppedCanvas.height = h;
         croppedCtx.putImageData(cut, 0, 0);
-        
+
         var data = (format == 'image/svg+xml' ? coppedSignaturePad._toSVG() : croppedCanvas.toDataURL(format));
-        return {dataURL:data, x: pix.x[0], y:pix.y[0], width:w, height:h};
+        return {dataURL: data, x: pix.x[0], y: pix.y[0], width: w, height: h};
     };
 
     SignaturePad.prototype.scale = function (ratio) {
-        this.fromData(this.scalePoints(this.toData(),ratio));
+        this.fromData(this.scalePoints(this.toData(), ratio));
     }
 
     SignaturePad.prototype.scalePoints = function (pointGroups, ratio) {
         var toData = new Array();
-        for (var i=0; i<pointGroups.length; i++) {
+        for (var i = 0; i < pointGroups.length; i++) {
             var toDraw = new Array();
-            for(var j=0; j<pointGroups[i].length; j++){
-                var x = pointGroups[i][j].x*ratio;
-                var y = pointGroups[i][j].y*ratio;
-                var time = pointGroups[i][j].time;
+            for (var j = 0; j < pointGroups[i].length; j++) {
+                var x = pointGroups[i][j].x * ratio;
+                var y = pointGroups[i][j].y * ratio;
+                var time = pointGroups[i][j].time * ratio;
                 var color = pointGroups[i][j].color;
-                toDraw.push({"x":x,"y":y,"time":time,"color":color});
+                toDraw.push({"x": x, "y": y, "time": time, "color": color});
             }
             toData.push(toDraw);
         }
