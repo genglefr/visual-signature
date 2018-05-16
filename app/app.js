@@ -72,6 +72,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                 range.value = 100;
                 enableTouchCheckbox.checked = false;
                 digitalSignature = _digitalSignature;
+                digitalSignature.registerDeviceOrientationEvents(window);
             });
         }
         reader.readAsArrayBuffer(file ? file : new Blob());
@@ -254,17 +255,5 @@ function dataURLToBlob(dataURL) {
         return new Blob([uInt8Array], { type: contentType });
     }
 }
-
-window.addEventListener('orientationchange', function () {
-    if (digitalSignature) {
-        digitalSignature.orientationChange();
-    }
-});
-
-/*window.addEventListener('resize', function () {
-    if (digitalSignature) {
-        digitalSignature.onResize(500);
-    }
-});*/
 
 

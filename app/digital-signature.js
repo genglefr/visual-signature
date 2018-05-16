@@ -21,6 +21,7 @@
         this.penColor = opts.penColor || "#2b2bff";
         this.openLastPageFirst = opts.openLastPageFirst || false;
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
+        this.resizeDelay = opts.resizeDelay || 500;
         this.currentScale = this.initScale = 0;
         this.initWidth = 0;
         this.pdf = null;
@@ -428,23 +429,34 @@
         this.loadPage(this.currentPage, true);
     }
 
-    DigitalSignature.prototype.orientationChange = function (ev) {
+    DigitalSignature.prototype.orientationChange = function (eventEmitter) {
         var self = this;
         var afterOrientationChange = function() {
             self.loadPage(self.currentPage);
-            window.removeEventListener('resize', afterOrientationChange);
+            eventEmitter.removeEventListener('resize', afterOrientationChange);
         };
-        window.addEventListener('resize', afterOrientationChange);
+        eventEmitter.addEventListener('resize', afterOrientationChange);
     }
 
-    DigitalSignature.prototype.onResize = function (delay) {
+    DigitalSignature.prototype.onResize = function () {
         var self = this;
         self.canvas.parentNode.style.transition = "unset";
         self.canvas.parentNode.style.opacity = 0;
         clearTimeout(self.resizeTimer);
         self.resizeTimer = setTimeout(function() {
             self.loadPage(self.currentPage);
-        }, delay);
+        }, self.resizeDelay);
+    }
+
+    DigitalSignature.prototype.registerDeviceOrientationEvents = function (eventEmitter) {
+        var self = this;
+        eventEmitter.addEventListener(("onorientationchange" in eventEmitter) ? "orientationchange" : "resize", function (e) {
+            if (e.type == "resize") {
+                self.onResize();
+            } else {
+                self.orientationChange(eventEmitter);
+            }
+        });
     }
 
     return DigitalSignature;
