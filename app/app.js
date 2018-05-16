@@ -6,6 +6,7 @@ var resetButton = wrapper.querySelector("[data-action=reset]");
 var copyAllButton = wrapper.querySelector("[data-action=copy-all]");
 var saveSignatureButton = wrapper.querySelector("[data-action=save-sign]");
 var cancelSignatureButton = wrapper.querySelector("[data-action=cancel-sign]");
+var enableTouchCheckbox = wrapper.querySelector("[data-action=enable-sign]");
 var savePDFButton = wrapper.querySelector("[data-action=save-pdf]");
 var firstPageButton = wrapper.querySelector("[data-action=first-page]");
 var prevPageButton = wrapper.querySelector("[data-action=prev-page]");
@@ -64,11 +65,12 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
                         "onLoadPage":onLoadPage
                         }).then(function(_digitalSignature){
                 /*Adapt UI*/
-                undoButton.disabled =clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
+                undoButton.disabled = clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
                 /*Ugly hack for IE*/
                 pdfNavWrapper.style.cssText = "";
                 pdfNavWrapper.style.display = "inline-block";
                 range.value = 100;
+                enableTouchCheckbox.checked = false;
                 digitalSignature = _digitalSignature;
             });
         }
@@ -89,7 +91,7 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
     }
 }
 
-wrapper.querySelector("[data-action=enable-sign]").onchange = function(ev) {
+enableTouchCheckbox.onchange = function(ev) {
     if (ev.target.checked) {
         bodyWrapper.firstChild.style.boxShadow = "0px 0px 20px #7615e5";
     } else {
