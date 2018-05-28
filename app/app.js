@@ -41,7 +41,7 @@ function onProgress(progress){
     setBarWidth(bar, progress);
 }
 
-function onLoadPage(digitalSignature) {
+function onLoadPage() {
     var pageNum = digitalSignature.getCurrentPage();
     currentPageWrapper.innerHTML = pageNum;
     nextPageButton.disabled = lastPageButton.disabled = (pageNum == digitalSignature.getTotalPages() ? "disabled" : "");

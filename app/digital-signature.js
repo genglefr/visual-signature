@@ -10,14 +10,14 @@
         if (!container || container.tagName.toLowerCase() != "div") {
             throw new Error("Please provide a <div> container.");
         }
-        if (!options.onLoadPdf) {
+        var opts = options || {};
+        if (!opts.onLoadPdf) {
             throw new Error("Please provide handler function for PDF load.");
         }
         this.canvas = document.createElement('canvas');
         this.empty(container);
         container.appendChild(this.canvas);
         this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
-        var opts = options || {};
         this.onProgress = opts.onProgress;
         this.onComplete = opts.onComplete;
         this.onLoadPage = opts.onLoadPage;
