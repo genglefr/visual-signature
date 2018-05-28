@@ -60,6 +60,10 @@
         });
     }
 
+    DigitalSignature.build = function(container, options) {
+        return new DigitalSignature(container, options);
+    }
+
     DigitalSignature.prototype.empty = function (element) {
         while (element.firstChild) element.removeChild(element.firstChild);
     }
@@ -451,6 +455,7 @@
     DigitalSignature.prototype.registerDeviceOrientationEvents = function (eventEmitter) {
         var self = this;
         eventEmitter.addEventListener(("onorientationchange" in eventEmitter) ? "orientationchange" : "resize", function (e) {
+            console.log(e.type);
             if (e.type == "resize") {
                 self.onResize();
             } else {

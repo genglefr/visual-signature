@@ -55,7 +55,7 @@ wrapper.querySelector("[id=file]").onchange = function(ev) {
     //if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            new DigitalSignature(
+            DigitalSignature.build(
                     bodyWrapper,
                         {
                         "file" : e.target.result.byteLength > 0 ? e.target.result : null,
