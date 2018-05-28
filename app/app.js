@@ -50,30 +50,32 @@ function onLoadPage(digitalSignature) {
 };
 
 var digitalSignature;
+function onLoadPdf(_digitalSignature) {
+    /*Adapt UI*/
+    undoButton.disabled = clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
+    /*Ugly hack for IE*/
+    pdfNavWrapper.style.cssText = "";
+    pdfNavWrapper.style.display = "inline-block";
+    range.value = 100;
+    enableTouchCheckbox.checked = false;
+    digitalSignature = _digitalSignature;
+    digitalSignature.registerDeviceOrientationEvents(window);
+}
+
 wrapper.querySelector("[id=file]").onchange = function(ev) {
     var file = ev.target.files[0];
     //if (file) {
         var reader = new FileReader();
         reader.onload = function (e) {
             DigitalSignature.build(
-                    bodyWrapper,
-                        {
-                        "file" : e.target.result.byteLength > 0 ? e.target.result : null,
-                        "filename": file ? file.name : null,
-                        "onComplete":onComplete,
-                        "onProgress":onProgress,
-                        "onLoadPage":onLoadPage
-                        }).then(function(_digitalSignature){
-                /*Adapt UI*/
-                undoButton.disabled = clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
-                /*Ugly hack for IE*/
-                pdfNavWrapper.style.cssText = "";
-                pdfNavWrapper.style.display = "inline-block";
-                range.value = 100;
-                enableTouchCheckbox.checked = false;
-                digitalSignature = _digitalSignature;
-                digitalSignature.registerDeviceOrientationEvents(window);
-            });
+                bodyWrapper, {
+                    "file" : e.target.result.byteLength > 0 ? e.target.result : null,
+                    "filename": file ? file.name : null,
+                    "onComplete": onComplete,
+                    "onProgress": onProgress,
+                    "onLoadPage": onLoadPage,
+                    "onLoadPdf": onLoadPdf
+                });
         }
         reader.readAsArrayBuffer(file ? file : new Blob());
     //}

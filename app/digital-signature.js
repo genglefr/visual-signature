@@ -10,6 +10,9 @@
         if (!container || container.tagName.toLowerCase() != "div") {
             throw new Error("Please provide a <div> container.");
         }
+        if (!options.onLoadPdf) {
+            throw new Error("Please provide handler function for PDF load.");
+        }
         this.canvas = document.createElement('canvas');
         this.empty(container);
         container.appendChild(this.canvas);
@@ -18,6 +21,7 @@
         this.onProgress = opts.onProgress;
         this.onComplete = opts.onComplete;
         this.onLoadPage = opts.onLoadPage;
+        this.onLoadPdf = opts.onLoadPdf;
         this.penColor = opts.penColor || "#2b2bff";
         this.openLastPageFirst = opts.openLastPageFirst || false;
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
@@ -44,7 +48,7 @@
                 self.onComplete(message.value, self.pdf.filename);
             }
         }, false);
-        return PDFJS.getDocument(this.file).then(function (_pdf) {
+        PDFJS.getDocument(this.file).then(function (_pdf) {
             self.pdf = _pdf;
             if (self.openLastPageFirst) {
                 self.currentPage = self.pdf.numPages;
@@ -56,7 +60,7 @@
                 self.signaturePad.on();
             }
             self.canvas.parentNode.style.display = "inline-block";
-            return Promise.resolve(self);
+            self.onLoadPdf(self);
         });
     }
 
