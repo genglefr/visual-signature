@@ -27,7 +27,7 @@
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
         this.resizeDelay = opts.resizeDelay || 500;
         this.currentScale = this.initScale = 0;
-        this.initWidth = 0;
+        this.previousWidth = undefined;
         this.pdf = null;
         this.signaturePad = this.createSignaturePad(this.canvas);
         this.signaturePad.off();
@@ -93,7 +93,7 @@
         self.canvas.parentNode.style.opacity = 0;
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
-            self.initWidth = self.canvas.clientWidth;
+            self.previousWidth = self.canvas.clientWidth;
             self.canvas.parentNode.style.transition = self.parentNodeTransition;
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
         }).catch(function(e) {
@@ -114,8 +114,8 @@
                 viewport: viewport
             };
             return page.render(renderContext).then(function () {
-                if (self.initWidth != containerWidth) {
-                    var ratio = containerWidth / self.initWidth;
+                if (self.previousWidth && self.previousWidth != containerWidth) {
+                    var ratio = containerWidth / self.previousWidth;
                     self.signaturePad.scale(ratio);
                     self.scaleHistory(ratio);
                 }
