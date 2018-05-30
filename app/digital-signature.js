@@ -286,7 +286,9 @@
     DigitalSignature.prototype.extractContent = function () {
         var struct = {};
         for (var i = 1; i <= this.getTotalPages(); i++) {
-            struct[i] = this.extractPageContent(i);
+            var pageContent = this.extractPageContent(i);
+            if (pageContent)
+                struct[i] = pageContent;
         }
         return struct;
     }
