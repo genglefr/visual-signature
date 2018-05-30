@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
             (global.DigitalSignature = factory());
-}(this, (function () {
+}(this, function () {
     'use strict';
 
     function DigitalSignature(container, options) {
@@ -64,7 +64,7 @@
         });
     }
 
-    DigitalSignature.build = function(container, options) {
+    DigitalSignature.build = function (container, options) {
         return new DigitalSignature(container, options);
     }
 
@@ -96,7 +96,7 @@
             self.previousWidth = self.canvas.clientWidth;
             self.canvas.parentNode.style.transition = self.parentNodeTransition;
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
-        }).catch(function(e) {
+        }).catch(function (e) {
             //Rendering task cancelled
         });
     };
@@ -131,7 +131,7 @@
                     _signaturePad.fromData(self.history[pageNum].pointGroups);
                 }
                 return Promise.resolve(_signaturePad);
-            }).catch(function(e){
+            }).catch(function (e) {
                 return Promise.reject(e);
             });
         });
@@ -439,7 +439,7 @@
 
     DigitalSignature.prototype.orientationChange = function (eventEmitter) {
         var self = this;
-        var afterOrientationChange = function() {
+        var afterOrientationChange = function () {
             self.loadPage(self.currentPage);
             eventEmitter.removeEventListener('resize', afterOrientationChange);
         };
@@ -451,7 +451,7 @@
         self.canvas.parentNode.style.transition = "unset";
         self.canvas.parentNode.style.opacity = 0;
         clearTimeout(self.resizeTimer);
-        self.resizeTimer = setTimeout(function() {
+        self.resizeTimer = setTimeout(function () {
             self.loadPage(self.currentPage);
         }, self.resizeDelay);
     }
@@ -459,7 +459,6 @@
     DigitalSignature.prototype.registerDeviceOrientationEvents = function (eventEmitter) {
         var self = this;
         eventEmitter.addEventListener(("onorientationchange" in eventEmitter) ? "orientationchange" : "resize", function (e) {
-            console.log(e.type);
             if (e.type == "resize") {
                 self.onResize();
             } else {
@@ -469,4 +468,4 @@
     }
 
     return DigitalSignature;
-})));
+}));
