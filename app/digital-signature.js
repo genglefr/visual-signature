@@ -7,7 +7,7 @@
 
     function DigitalSignature(container, options) {
         var self = this;
-        if (!container || container.tagName.toLowerCase() != "div") {
+        if (!container || container.tagName.toLowerCase() !== "div") {
             throw new Error("Please provide a <div> container.");
         }
         var opts = options || {};
@@ -62,11 +62,11 @@
 
     DigitalSignature.build = function (container, options) {
         return new DigitalSignature(container, options);
-    }
+    };
 
     DigitalSignature.prototype.empty = function (element) {
         while (element.firstChild) element.removeChild(element.firstChild);
-    }
+    };
 
     DigitalSignature.prototype.resetCanvas = function (container) {
         this.canvas = document.createElement('canvas');
@@ -76,7 +76,7 @@
         this.signaturePad = this.createSignaturePad(this.canvas);
         if (!enabled)
             this.signaturePad.off();
-    }
+    };
 
     DigitalSignature.prototype.loadPage = function (pageNum, avoidScroll) {
         var self = this;
@@ -104,7 +104,7 @@
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
         }).catch(function (e) {
             // Rendering task was cancelled by a more recent one, we can deal with that
-            if (e.type == "canvas")
+            if (e.type === "canvas")
                 return;
             // Something unmanageable happened: reset the canvas after 50ms
             setTimeout(function () {
@@ -131,7 +131,7 @@
             }
             _canvas.renderTask = page.render(renderContext);
             return _canvas.renderTask.then(function () {
-                if (self.previousWidth && self.previousWidth != containerWidth) {
+                if (self.previousWidth && self.previousWidth !== containerWidth) {
                     var ratio = containerWidth / self.previousWidth;
                     self.signaturePad.scale(ratio);
                     self.scaleHistory(ratio);
@@ -210,7 +210,7 @@
             this.history[this.currentPage].pointGroups = this.signaturePad.toData();
         }
         var backup = JSON.parse(JSON.stringify(this.history));
-        var promises = new Array();
+        var promises = [];
         for (var i = 1; i <= this.getTotalPages(); i++) {
             var canvas = document.createElement('canvas');
             canvas.width = this.canvas.width;
@@ -229,7 +229,6 @@
         var promises = this.renderPages();
         var struct = {};
         Promise.all(promises).then(function (values) {
-            var inc = 100 / values.length;
             for (var i = 0; i < values.length; i++) {
                 var dataUrl = self._getDataURL(values[i], "image/jpeg");
                 if (dataUrl) {
@@ -287,7 +286,7 @@
             initContent.dataURL = scaledContent.dataURL;
             return initContent;
         }
-    }
+    };
 
     DigitalSignature.prototype.scaleAndExtractContent = function (ratio, fromData) {
         var canvas = document.createElement('canvas');
@@ -302,7 +301,7 @@
             tempSignaturePad.scale(ratio);
             return tempSignaturePad.removeBlanks();
         }
-    }
+    };
 
     DigitalSignature.prototype.extractContent = function () {
         var struct = {};
@@ -312,7 +311,7 @@
                 struct[i] = pageContent;
         }
         return struct;
-    }
+    };
 
     DigitalSignature.prototype.getScale = function () {
         return Math.round(100 * (this.currentScale / this.initScale));
@@ -345,7 +344,7 @@
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // set the drag flag
             this.isDragging = true;
-        }
+        };
         canvas.onmousemove = function (e) {
             this.canMouseX = parseInt(e.clientX + window.scrollX);
             this.canMouseY = parseInt(e.clientY + window.scrollY);
@@ -355,28 +354,28 @@
                 var cumulativeOffset = canvas.cumulativeOffset();
                 this.draw(img, this.canMouseX - (img.width / 2) - cumulativeOffset.left, this.canMouseY - (img.height / 2) - cumulativeOffset.top);
             }
-        }
+        };
         canvas.onmouseup = function (e) {
             //this.canMouseX=parseInt(e.clientX-offsetX);
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // clear the drag flag
             this.isDragging = false;
-        }
+        };
         canvas.onmouseout = function (e) {
             //this.canMouseX=parseInt(e.clientX-offsetX);
             //this.canMouseY=parseInt(e.clientY-offsetY);
             // user has left the canvas, so clear the drag flag
             this.isDragging = false;
-        }
+        };
         canvas.draw = function (image, offsetX, offsetY) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.imageOptions = {
                 "image": image,
                 "offsetX": offsetX,
                 "offsetY": offsetY
-            }
+            };
             ctx.drawImage(image, offsetX, offsetY, img.width, img.height);
-        }
+        };
 
         this.tempCanvas = canvas;
         img.onload = function () {
@@ -395,7 +394,7 @@
             this.tempCanvas.imageOptions.image.height = this.tempCanvas.imageOptions.image.initHeight * (percent / 100);
             this.tempCanvas.draw(this.tempCanvas.imageOptions.image, this.tempCanvas.imageOptions.offsetX, this.tempCanvas.imageOptions.offsetY);
         }
-    }
+    };
 
     DigitalSignature.prototype.saveImage = function () {
         if (this.tempCanvas) {
@@ -408,18 +407,18 @@
             this.tempCanvas.remove();
             this.loadPage(this.currentPage);
         }
-    }
+    };
 
     DigitalSignature.prototype.cancelImage = function () {
         if (this.tempCanvas) {
             this.tempCanvas.remove();
             this.loadPage(this.currentPage);
         }
-    }
+    };
 
     DigitalSignature.prototype.applyOnAllPages = function () {
         for (var i = 1; i <= this.getTotalPages(); i++) {
-            if (this.currentPage != i) {
+            if (this.currentPage !== i) {
                 var temp = {};
                 temp.pointGroups = !this.signaturePad.isEmpty() ? this.signaturePad.toData() : {};
                 if (this.history[this.currentPage].images) {
@@ -445,7 +444,7 @@
                 this.history[i] = temp;
             }
         }
-    }
+    };
 
     DigitalSignature.prototype.enableTouch = function (enable) {
         if (enable) {
@@ -453,12 +452,12 @@
         } else {
             this.signaturePad.off();
         }
-    }
+    };
 
     DigitalSignature.prototype.undo = function () {
         this.signaturePad._data.pop();
         this.loadPage(this.currentPage, true);
-    }
+    };
 
     DigitalSignature.prototype.orientationChange = function (eventEmitter) {
         var self = this;
@@ -467,7 +466,7 @@
             eventEmitter.removeEventListener('resize', afterOrientationChange);
         };
         eventEmitter.addEventListener('resize', afterOrientationChange);
-    }
+    };
 
     DigitalSignature.prototype.onResize = function () {
         var self = this;
@@ -477,18 +476,18 @@
         self.resizeTimer = setTimeout(function () {
             self.loadPage(self.currentPage);
         }, self.resizeDelay);
-    }
+    };
 
     DigitalSignature.prototype.registerDeviceOrientationEvents = function (eventEmitter) {
         var self = this;
         eventEmitter.addEventListener(("onorientationchange" in eventEmitter) ? "orientationchange" : "resize", function (e) {
-            if (e.type == "resize") {
+            if (e.type === "resize") {
                 self.onResize();
             } else {
                 self.orientationChange(eventEmitter);
             }
         });
-    }
+    };
 
     return DigitalSignature;
 }));
