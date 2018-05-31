@@ -14,9 +14,7 @@
         if (!opts.onLoadPdf) {
             throw new Error("Please provide handler function for PDF load.");
         }
-        this.canvas = document.createElement('canvas');
-        this.empty(container);
-        container.appendChild(this.canvas);
+        this.resetCanvas(container);
         this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.onProgress = opts.onProgress;
         this.onComplete = opts.onComplete;
@@ -73,6 +71,12 @@
         while (element.firstChild) element.removeChild(element.firstChild);
     }
 
+    DigitalSignature.prototype.resetCanvas = function (container) {
+        this.canvas = document.createElement('canvas');
+        this.empty(container);
+        container.appendChild(this.canvas);
+    }
+
     DigitalSignature.prototype.loadPage = function (pageNum, avoidScroll) {
         var self = this;
         if (this.signaturePad) {
@@ -98,7 +102,14 @@
             self.canvas.parentNode.style.transition = self.parentNodeTransition;
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
         }).catch(function (e) {
-            //Rendering task cancelled
+            // Rendering task was cancelled by a more recent one, we can deal with that
+            if (e.type == "canvas")
+                return;
+            // Something unmanageable happened: reset the canvas after 50ms
+            setTimeout(function () {
+                self.resetCanvas(self.canvas.parentNode);
+                self.loadPage(self.currentPage);
+            }, 50);
         });
     };
 
@@ -114,9 +125,10 @@
                 canvasContext: _canvas.getContext('2d'),
                 viewport: viewport
             };
-            if (self.renderTask) {
+            if (self.renderTask && _canvas.used) {
                 self.renderTask.cancel();
             }
+            _canvas.used = true;
             self.renderTask = page.render(renderContext);
             return self.renderTask.then(function () {
                 if (self.previousWidth && self.previousWidth != containerWidth) {
@@ -137,8 +149,9 @@
                 }
                 return Promise.resolve(_signaturePad);
             }).catch(function (e) {
-                console.log(e);
                 return Promise.reject(e);
+            }).finally(function() {
+                delete _canvas.used;
             });
         });
     };
