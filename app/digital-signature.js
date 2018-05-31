@@ -32,7 +32,6 @@
         this.currentPage = 1;
         this.filename = opts.filename || "file.pdf";
         this.file = opts.file || new jsPDF().output('arraybuffer');
-        this.renderTask = undefined;
 
         this.parentNodeOpacity = this.canvas.parentNode.style.opacity;
         this.parentNodeTransition = this.canvas.parentNode.style.transition;
@@ -125,12 +124,11 @@
                 canvasContext: _canvas.getContext('2d'),
                 viewport: viewport
             };
-            if (self.renderTask && _canvas.used) {
-                self.renderTask.cancel();
+            if (_canvas.renderTask) {
+                _canvas.renderTask.cancel();
             }
-            _canvas.used = true;
-            self.renderTask = page.render(renderContext);
-            return self.renderTask.then(function () {
+            _canvas.renderTask = page.render(renderContext);
+            return _canvas.renderTask.then(function () {
                 if (self.previousWidth && self.previousWidth != containerWidth) {
                     var ratio = containerWidth / self.previousWidth;
                     self.signaturePad.scale(ratio);
@@ -151,7 +149,7 @@
             }).catch(function (e) {
                 return Promise.reject(e);
             }).finally(function() {
-                delete _canvas.used;
+                delete _canvas.renderTask;
             });
         });
     };
