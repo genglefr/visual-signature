@@ -244,6 +244,7 @@
     SignaturePad.prototype.on = function () {
         this._handleMouseEvents();
         this._handleTouchEvents();
+        this.enabled = true;
     };
 
     SignaturePad.prototype.off = function () {
@@ -258,6 +259,7 @@
         this._canvas.removeEventListener('touchstart', this._handleTouchStart);
         this._canvas.removeEventListener('touchmove', this._handleTouchMove);
         this._canvas.removeEventListener('touchend', this._handleTouchEnd);
+        this.enabled = false;
     };
 
     SignaturePad.prototype.isEmpty = function () {

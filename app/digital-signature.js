@@ -14,21 +14,19 @@
         if (!opts.onLoadPdf) {
             throw new Error("Please provide handler function for PDF load.");
         }
+        this.penColor = opts.penColor || "#2b2bff";
         this.resetCanvas(container);
         this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.onProgress = opts.onProgress;
         this.onComplete = opts.onComplete;
         this.onLoadPage = opts.onLoadPage;
         this.onLoadPdf = opts.onLoadPdf;
-        this.penColor = opts.penColor || "#2b2bff";
         this.openLastPageFirst = opts.openLastPageFirst || false;
         this.enableTouchOnLoad = opts.enableTouchOnLoad || false;
         this.resizeDelay = opts.resizeDelay || 500;
         this.currentScale = this.initScale = 0;
         this.previousWidth = undefined;
         this.pdf = null;
-        this.signaturePad = this.createSignaturePad(this.canvas);
-        this.signaturePad.off();
         this.currentPage = 1;
         this.filename = opts.filename || "file.pdf";
         this.file = opts.file || new jsPDF().output('arraybuffer');
@@ -74,6 +72,10 @@
         this.canvas = document.createElement('canvas');
         this.empty(container);
         container.appendChild(this.canvas);
+        var enabled = this.signaturePad && this.signaturePad.enabled;
+        this.signaturePad = this.createSignaturePad(this.canvas);
+        if (!enabled)
+            this.signaturePad.off();
     }
 
     DigitalSignature.prototype.loadPage = function (pageNum, avoidScroll) {
