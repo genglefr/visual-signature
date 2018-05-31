@@ -209,6 +209,7 @@
         if (!this.signaturePad.isEmpty()) {
             this.history[this.currentPage].pointGroups = this.signaturePad.toData();
         }
+        var backup = JSON.parse(JSON.stringify(this.history));
         var promises = new Array();
         for (var i = 1; i <= this.getTotalPages(); i++) {
             var canvas = document.createElement('canvas');
@@ -219,6 +220,7 @@
             promises.push(this.renderPage(i, canvas, printSignaturePad));
             printSignaturePad.off();
         }
+        this.history = backup;
         return promises;
     };
 
