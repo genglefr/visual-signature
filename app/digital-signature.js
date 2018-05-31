@@ -137,7 +137,6 @@
                 }
                 return Promise.resolve(_signaturePad);
             }).catch(function (e) {
-                console.log(e);
                 return Promise.reject(e);
             });
         });
