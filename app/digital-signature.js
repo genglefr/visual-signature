@@ -292,8 +292,8 @@
 
     DigitalSignature.prototype.scaleAndExtractContent = function (ratio, fromData) {
         var canvas = document.createElement('canvas');
-        canvas.width = this.canvas.width;
-        canvas.height = this.canvas.height;
+        canvas.width = this.canvas.width * ratio;
+        canvas.height = this.canvas.height * ratio;
         var tempSignaturePad = new SignaturePad(canvas, {
             minWidth: this.signaturePad.minWidth * ratio,
             maxWidth: this.signaturePad.maxWidth * ratio
