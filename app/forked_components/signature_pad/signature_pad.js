@@ -654,8 +654,10 @@
         var n = pix.x.length - 1;
 
         w = pix.x[n] - pix.x[0];
+        // Workaround for corner case: very small point on first pixel column
+        w = (w == 0 ? 1 : w);
         h = pix.y[n] - pix.y[0];
-        var cut = croppedCtx.getImageData(Math.round(pix.x[0]), Math.round(pix.y[0]), Math.round(w), Math.round(h));
+        var cut = croppedCtx.getImageData(pix.x[0], pix.y[0], w, h);
 
         croppedCanvas.width = w;
         croppedCanvas.height = h;
