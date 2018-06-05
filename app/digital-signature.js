@@ -103,11 +103,11 @@
             self.canvas.parentNode.style.transition = self.parentNodeTransition;
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
         }).catch(function (e) {
+            // Still, update the UI thread if needed (page number change, release next/previous buttons...
+            if (self.onLoadPage) self.onLoadPage(self);
             // Rendering task was cancelled by a more recent one, we can deal with that
-            if (e.type === "canvas") {
-                if (self.onLoadPage) self.onLoadPage(self);
+            if (e.type === "canvas")
                 return;
-            }
             // Something unmanageable happened: reset the canvas after 50ms
             setTimeout(function () {
                 self.resetCanvas(self.canvas.parentNode);
