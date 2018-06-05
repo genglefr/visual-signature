@@ -104,8 +104,10 @@
             self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
         }).catch(function (e) {
             // Rendering task was cancelled by a more recent one, we can deal with that
-            if (e.type === "canvas")
+            if (e.type === "canvas") {
+                if (self.onLoadPage) self.onLoadPage(self);
                 return;
+            }
             // Something unmanageable happened: reset the canvas after 50ms
             setTimeout(function () {
                 self.resetCanvas(self.canvas.parentNode);
@@ -131,6 +133,7 @@
             }
             _canvas.renderTask = page.render(renderContext);
             return _canvas.renderTask.then(function () {
+                delete _canvas.renderTask;
                 if (self.previousWidth && self.previousWidth !== containerWidth) {
                     var ratio = containerWidth / self.previousWidth;
                     self.signaturePad.scale(ratio);
@@ -149,9 +152,8 @@
                 }
                 return Promise.resolve(_signaturePad);
             }).catch(function (e) {
-                return Promise.reject(e);
-            }).finally(function() {
                 delete _canvas.renderTask;
+                return Promise.reject(e);
             });
         });
     };
