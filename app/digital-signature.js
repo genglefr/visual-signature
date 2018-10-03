@@ -89,7 +89,7 @@
             console.log("should not happen");
         }
         this.currentPage = pageNum;
-        if (!avoidScroll) {
+        if (!avoidScroll && self.canvas.parentNode) {
             window.scrollTo({
                 top: self.canvas.parentNode.scrollTop,
                 behavior: "smooth"
@@ -472,8 +472,10 @@
 
     DigitalSignature.prototype.onResize = function () {
         var self = this;
-        self.canvas.parentNode.style.transition = "unset";
-        self.canvas.parentNode.style.opacity = 0;
+        if (self.canvas.parentNode) {
+            self.canvas.parentNode.style.transition = "unset";
+            self.canvas.parentNode.style.opacity = 0;
+        }
         clearTimeout(self.resizeTimer);
         self.resizeTimer = setTimeout(function () {
             self.loadPage(self.currentPage);
