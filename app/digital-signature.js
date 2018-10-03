@@ -95,8 +95,10 @@
                 behavior: "smooth"
             });
         }
-        self.canvas.parentNode.style.transition = "unset";
-        self.canvas.parentNode.style.opacity = 0;
+        if (self.canvas.parentNode) {
+            self.canvas.parentNode.style.transition = "unset";
+            self.canvas.parentNode.style.opacity = 0;
+        }
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.previousWidth = self.canvas.clientWidth;
@@ -189,6 +191,18 @@
             var pointGroups = this.history[key].pointGroups;
             if (pointGroups)
                 this.history[key].pointGroups = this.signaturePad.scalePoints(pointGroups, ratio);
+            var images = this.history[key].images;
+            if (images) {
+                var imagekeys = Object.keys(images);
+                for (var j = 0; j < imagekeys.length; j++) {
+                    var imagekey = imagekeys[j];
+                    var img = images[imagekey];
+                    img.image.width = img.image.width * ratio;
+                    img.image.height = img.image.height * ratio;
+                    img.offsetX = img.offsetX * ratio;
+                    img.offsetY = img.offsetY * ratio;
+                }
+            }
         }
     };
 
@@ -222,7 +236,7 @@
             promises.push(this.renderPage(i, canvas, printSignaturePad));
             printSignaturePad.off();
         }
-        this.history = backup;
+        //this.history = backup;
         return promises;
     };
 
