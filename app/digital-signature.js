@@ -65,7 +65,7 @@
     };
 
     DigitalSignature.prototype.empty = function (element) {
-        while (element.firstChild) element.removeChild(element.firstChild);
+        while (element && element.firstChild) element.removeChild(element.firstChild);
     };
 
     DigitalSignature.prototype.resetCanvas = function (container) {
@@ -102,9 +102,12 @@
         this.renderPage(pageNum, this.canvas, this.signaturePad).then(function () {
             if (self.onLoadPage) self.onLoadPage(self);
             self.previousWidth = self.canvas.clientWidth;
-            self.canvas.parentNode.style.transition = self.parentNodeTransition;
-            self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
+            if (self.canvas.parentNode) {
+                self.canvas.parentNode.style.transition = self.parentNodeTransition;
+                self.canvas.parentNode.style.opacity = self.parentNodeOpacity;
+            }
         }).catch(function (e) {
+            //console.log(e);
             // Still, update the UI thread if needed (page number change, release next/previous buttons...
             if (self.onLoadPage) self.onLoadPage(self);
             // Rendering task was cancelled by a more recent one, we can deal with that
