@@ -199,14 +199,20 @@
                 var imagekeys = Object.keys(images);
                 for (var j = 0; j < imagekeys.length; j++) {
                     var imagekey = imagekeys[j];
-                    var img = images[imagekey];
-                    img.image.width = img.image.width * ratio;
-                    img.image.height = img.image.height * ratio;
-                    img.offsetX = img.offsetX * ratio;
-                    img.offsetY = img.offsetY * ratio;
+                    images[imagekey] = this.scaleImage(ratio, images[imagekey], true);
                 }
             }
         }
+    };
+
+    DigitalSignature.prototype.scaleImage= function(ratio, original, scaleOriginal) {
+        var modified = {};
+        modified.image = scaleOriginal ? original.image : {};
+        modified.image.width = original.image.width * ratio;
+        modified.image.height = original.image.height * ratio;
+        modified.offsetX = original.offsetX * ratio;
+        modified.offsetY = original.offsetY * ratio;
+        return modified;
     };
 
     DigitalSignature.prototype.createSignaturePad = function (_canvas) {
@@ -299,15 +305,18 @@
 
     DigitalSignature.prototype.extractPageContent = function (pageNum) {
         var fromData = !pageNum || pageNum === this.currentPage ? this.signaturePad.toData() : this.history[pageNum].pointGroups;
-        if (fromData && fromData.length > 0) {
-            var initContent = this.scaleAndExtractContent(1 / this.currentScale, fromData);
-            var scaledContent = this.scaleAndExtractContent(4 / this.currentScale, fromData);
-            initContent.dataURL = scaledContent.dataURL;
+        var images = this.history[pageNum].images;
+        if ((fromData && fromData.length > 0) || images) {
+            var initContent = this.scaleAndExtractContent(1 / this.currentScale, fromData, images);
+            var scaledContent = this.scaleAndExtractContent(4 / this.currentScale, fromData, images);
+            if (scaledContent.dataURL) {
+                initContent.dataURL = scaledContent.dataURL;
+            }
             return initContent;
         }
     };
 
-    DigitalSignature.prototype.scaleAndExtractContent = function (ratio, fromData) {
+    DigitalSignature.prototype.scaleAndExtractContent = function (ratio, fromData, images) {
         var canvas = document.createElement('canvas');
         canvas.width = this.canvas.width * ratio;
         canvas.height = this.canvas.height * ratio;
@@ -316,17 +325,28 @@
             maxWidth: this.signaturePad.maxWidth * ratio
         });
         tempSignaturePad.fromData(fromData);
+        var result = {};
         if (!tempSignaturePad.isEmpty()) {
             tempSignaturePad.scale(ratio);
-            return tempSignaturePad.removeBlanks();
+            result = tempSignaturePad.removeBlanks();
         }
+        var imagekeys = Object.keys(images);
+        if (imagekeys.length > 0) {
+            var array = [];
+            for (var j = 0; j < imagekeys.length; j++) {
+                var imagekey = imagekeys[j];
+                array.push(this.scaleImage(ratio, images[imagekey], false));
+            }
+            result.images = array;
+        }
+        return result;
     };
 
     DigitalSignature.prototype.extractContent = function () {
         var struct = {};
         for (var i = 1; i <= this.getTotalPages(); i++) {
             var pageContent = this.extractPageContent(i);
-            if (pageContent)
+            if (Object.keys(pageContent).length > 0)
                 struct[i] = pageContent;
         }
         return struct;
@@ -353,8 +373,10 @@
             };
         };
         canvas.className = "temp-canvas";
-        canvas.width = self.canvas.width;
-        canvas.height = self.canvas.height;
+        canvas.width = self.canvas.clientWidth;
+        canvas.height = self.canvas.clientHeight;
+        var leftstyle = self.canvas.offsetLeft + "px";
+        canvas.style.left = leftstyle;
         document.querySelector("[class=signature-pad--body]").appendChild(canvas);
         var ctx = canvas.getContext('2d');
         var img = new Image();
@@ -403,7 +425,7 @@
         img.src = imageFile;
     };
 
-    DigitalSignature.prototype.scaleImage = function (percent) {
+    DigitalSignature.prototype.scaleTempImage = function (percent) {
         if (this.tempCanvas) {
             if (!this.tempCanvas.imageOptions.image.initWidth && !this.tempCanvas.imageOptions.image.initHeight) {
                 this.tempCanvas.imageOptions.image.initWidth = this.tempCanvas.imageOptions.image.width;

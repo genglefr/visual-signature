@@ -79,6 +79,9 @@ canvas {
 .temp-canvas{
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
+  top: unset !important;
+  width: unset !important;
+
 }
 
 .signature-pad--header {

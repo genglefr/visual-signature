@@ -137,7 +137,7 @@ range.onchange = function(ev) {
 
 rangeSignature.onchange = function(ev) {
     var value = ev.target.value;
-    digitalSignature.scaleImage(value);
+    digitalSignature.scaleTempImage(value);
     rangeSignatureLabel.textContent = value+"%";
 }
 
