@@ -387,13 +387,14 @@
             this.isDragging = true;
         };
         canvas.onmousemove = function (e) {
-            this.canMouseX = parseInt(e.clientX + window.scrollX);
-            this.canMouseY = parseInt(e.clientY + window.scrollY);
+            var rect = canvas.getBoundingClientRect();
+            this.canMouseX = parseInt(e.clientX - rect.left);
+            this.canMouseY = parseInt(e.clientY - rect.top);
 
             // if the drag flag is set, clear the canvas and draw the image
             if (this.isDragging) {
-                var cumulativeOffset = canvas.cumulativeOffset();
-                this.draw(img, this.canMouseX - (img.width / 2) - cumulativeOffset.left, this.canMouseY - (img.height / 2) - cumulativeOffset.top);
+                // var cumulativeOffset = canvas.cumulativeOffset();
+                this.draw(img, this.canMouseX - (img.width / 2), this.canMouseY - (img.height / 2));
             }
         };
         canvas.onmouseup = function (e) {
@@ -415,6 +416,7 @@
                 "offsetX": offsetX,
                 "offsetY": offsetY
             };
+            ctx.strokeRect(offsetX, offsetY, img.width, img.height);
             ctx.drawImage(image, offsetX, offsetY, img.width, img.height);
         };
 
