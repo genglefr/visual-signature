@@ -28,16 +28,16 @@ var rangeSignatureLabel = wrapper.querySelector("[name=range-signature-label]");
 
 function onComplete(content, filename) {
     download(content, filename);
-    setTimeout(function(){
+    setTimeout(function () {
         progressBarWrapper.style.display = "none";
     }, 2000);
 }
 
-function setBarWidth(_bar, _width){
-    _bar.style.width = Math.round(_width)+'%';
+function setBarWidth(_bar, _width) {
+    _bar.style.width = Math.round(_width) + '%';
 }
 
-function onProgress(progress){
+function onProgress(progress) {
     setBarWidth(bar, progress);
 }
 
@@ -46,10 +46,11 @@ function onLoadPage() {
     currentPageWrapper.innerHTML = pageNum;
     nextPageButton.disabled = lastPageButton.disabled = (pageNum == digitalSignature.getTotalPages() ? "disabled" : "");
     prevPageButton.disabled = firstPageButton.disabled = (pageNum == 1 ? "disabled" : "");
-    rangeLabel.textContent = digitalSignature.getScale()+"%";
+    rangeLabel.textContent = digitalSignature.getScale() + "%";
 };
 
 var digitalSignature;
+
 function onLoadPdf(_digitalSignature) {
     /*Adapt UI*/
     undoButton.disabled = clearButton.disabled = resetButton.disabled = printButton.disabled = savePDFButton.disabled = loadSignatureButton.disabled = copyAllButton.disabled = false;//savePNGButton.disabled = saveSignatureButton.disabled =
@@ -62,26 +63,26 @@ function onLoadPdf(_digitalSignature) {
     digitalSignature.registerDeviceOrientationEvents(window);
 }
 
-wrapper.querySelector("[id=file]").onchange = function(ev) {
+wrapper.querySelector("[id=file]").onchange = function (ev) {
     var file = ev.target.files[0];
     //if (file) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            DigitalSignature.build(
-                bodyWrapper, {
-                    "file" : e.target.result.byteLength > 0 ? e.target.result : null,
-                    "filename": file ? file.name : null,
-                    "onComplete": onComplete,
-                    "onProgress": onProgress,
-                    "onLoadPage": onLoadPage,
-                    "onLoadPdf": onLoadPdf
-                });
-        }
-        reader.readAsArrayBuffer(file ? file : new Blob());
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        DigitalSignature.build(
+            bodyWrapper, {
+                "file": e.target.result.byteLength > 0 ? e.target.result : null,
+                "filename": file ? file.name : null,
+                "onComplete": onComplete,
+                "onProgress": onProgress,
+                "onLoadPage": onLoadPage,
+                "onLoadPdf": onLoadPdf
+            });
+    }
+    reader.readAsArrayBuffer(file ? file : new Blob());
     //}
 }
 
-wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
+wrapper.querySelector("[id=imageFile]").onchange = function (ev) {
     var file = ev.target.files[0];
     if (file) {
         var reader = new FileReader();
@@ -94,7 +95,11 @@ wrapper.querySelector("[id=imageFile]").onchange = function(ev) {
     }
 }
 
-enableTouchCheckbox.onchange = function(ev) {
+wrapper.querySelector("[data-action=enable-sign-switch]").onclick = function (ev) {
+    enableTouchCheckbox.click();
+}
+
+enableTouchCheckbox.onchange = function (ev) {
     if (ev.target.checked) {
         bodyWrapper.firstChild.style.boxShadow = "0px 0px 20px #7615e5";
     } else {
@@ -119,8 +124,8 @@ copyAllButton.addEventListener("click", function (event) {
     digitalSignature.applyOnAllPages();
 });
 
-function adaptUiForImageChange(imageLoaded){
-    if(imageLoaded){
+function adaptUiForImageChange(imageLoaded) {
+    if (imageLoaded) {
         mainWrapper.style.display = pdfNavWrapper.style.display = "none";
         signatureWrapper.style.display = "inline-block";
         rangeSignatureLabel.textContent = "100%";
@@ -130,15 +135,15 @@ function adaptUiForImageChange(imageLoaded){
     }
 }
 
-range.onchange = function(ev) {
+range.onchange = function (ev) {
     var value = ev.target.value;
     digitalSignature.scale(value);
 }
 
-rangeSignature.onchange = function(ev) {
+rangeSignature.onchange = function (ev) {
     var value = ev.target.value;
     digitalSignature.scaleTempImage(value);
-    rangeSignatureLabel.textContent = value+"%";
+    rangeSignatureLabel.textContent = value + "%";
 }
 
 savePDFButton.addEventListener("click", function (event) {
@@ -157,7 +162,7 @@ printButton.addEventListener("click", function (event) {
             top: 0,
             behavior: "smooth"
         });
-        modalContent.innerHTML='';
+        modalContent.innerHTML = '';
         modal.style.display = "none";
         wrapper.style.display = "block";
     });
@@ -223,7 +228,7 @@ function test() {
 
 function download(dataURL, filename) {
     var blob = dataURLToBlob(dataURL);
-    if (blob){
+    if (blob) {
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(blob, filename);
         } else {
@@ -245,7 +250,7 @@ function download(dataURL, filename) {
 // that it can be done using result of SignaturePad#toDataURL.
 function dataURLToBlob(dataURL) {
     // Code taken from https://github.com/ebidel/filer.js
-    if (dataURL){
+    if (dataURL) {
         var parts = dataURL.split(';base64,');
         var contentType = parts[0].split(":")[1];
         var raw = window.atob(parts[1]);
@@ -254,7 +259,7 @@ function dataURLToBlob(dataURL) {
         for (var i = 0; i < rawLength; ++i) {
             uInt8Array[i] = raw.charCodeAt(i);
         }
-        return new Blob([uInt8Array], { type: contentType });
+        return new Blob([uInt8Array], {type: contentType});
     }
 }
 

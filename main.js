@@ -10,7 +10,7 @@ function createWindow () {
     // Create the browser window.
     //win = new BrowserWindow({frame: false})
     win = new BrowserWindow({width:1430, height:1024, transparent: true, frame: false})
-    //win.openDevTools({mode:"detach"})
+    win.openDevTools({mode:"detach"})
     win.setMenu(null)
     win.maximize()
 
